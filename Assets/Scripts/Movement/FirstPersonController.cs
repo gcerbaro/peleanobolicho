@@ -8,21 +8,27 @@ public class FirstPersonController : MonoBehaviour
 {
     private bool CanMove { get; set; } = true;
     private bool _isSprinting => canSprint && Input.GetKey(sprintKey);
+    private bool _shouldJump => Input.GetKeyDown(jumpKey) && _characterController.isGrounded; 
     
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
+    [SerializeField] private bool canJump = true;
     
     [Header("Controls")] 
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
 
     [Header("Movement parameters")] 
     [SerializeField] private float walkSpeed = 2.0f;
     [SerializeField] private float sprintSpeed = 6.0f;
-    [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float speedSmoothTime = 0.15f;
     
     [Header("Look parameters")]
     [SerializeField] private float sensitivity = 2f;
+    
+    [Header("Jump parameters")]
+    [SerializeField] private float jumpForce = 4.0f;
+    [SerializeField] private float gravity = -9.81f;
     
     //Variaveis de velocidade
     private float _targetSpeed; 
@@ -53,6 +59,9 @@ public class FirstPersonController : MonoBehaviour
         {
             HandleMovementInput();
             HandleMouseLook();
+
+            if (canJump) 
+                HandleJump();
             
             ApplyFinalMovements();
         }
@@ -83,6 +92,12 @@ public class FirstPersonController : MonoBehaviour
         
         _playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0f, 0f);
         transform.rotation *= Quaternion.Euler(0f, Input.GetAxis("Mouse X") * sensitivity, 0f);
+    }
+    
+    private void HandleJump()
+    {
+        if (_shouldJump)
+            _moveDirection.y = jumpForce;
     }
 
     private void ApplyFinalMovements()
