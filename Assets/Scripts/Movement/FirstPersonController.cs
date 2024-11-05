@@ -7,16 +7,20 @@ using UnityEngine;
 public class FirstPersonController : MonoBehaviour
 {
     private bool CanMove { get; set; } = true;
-    private bool _isSprinting => canSprint && Input.GetKey(sprintKey);
-    private bool _shouldJump => Input.GetKeyDown(jumpKey) && _characterController.isGrounded; 
+    private bool IsSprinting => canSprint && Input.GetKey(sprintKey);
+    private bool ShouldJump => Input.GetKeyDown(jumpKey) && _characterController.isGrounded; 
+    private bool ShouldCrouch => Input.GetKeyDown(crouchKey) && !_duringCrouchAnimation && _characterController.isGrounded;
+    
     
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
     [SerializeField] private bool canJump = true;
+    [SerializeField] private bool canCrouch = true;
     
     [Header("Controls")] 
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+    [SerializeField] private KeyCode crouchKey = KeyCode.Space;
 
     [Header("Movement parameters")] 
     [SerializeField] private float walkSpeed = 2.0f;
@@ -29,6 +33,17 @@ public class FirstPersonController : MonoBehaviour
     [Header("Jump parameters")]
     [SerializeField] private float jumpForce = 4.0f;
     [SerializeField] private float gravity = -9.81f;
+    
+    [Header("Crouch parameters")]
+    [SerializeField] private float crouchHeight = 0.5f;
+    [SerializeField] private float standingHeight = 0.5f;
+    [SerializeField] private float timeToCrouch = 0.5f;
+    [SerializeField] private Vector3 crouchingCenter = new Vector3(0, 0.5f, 0);
+    [SerializeField] private Vector3 standingCenter = new Vector3(0, 0, 0);
+    
+    //Crouching
+    private bool _isCrouching;
+    private bool _duringCrouchAnimation;
     
     //Variaveis de velocidade
     private float _targetSpeed; 
@@ -63,6 +78,9 @@ public class FirstPersonController : MonoBehaviour
             if (canJump) 
                 HandleJump();
             
+            if (canCrouch)
+                HandleCrouch();
+            
             ApplyFinalMovements();
         }
     }
@@ -70,7 +88,7 @@ public class FirstPersonController : MonoBehaviour
     private void HandleMovementInput()
     {
         //seta a velocidade buscada
-        _targetSpeed = _isSprinting ? sprintSpeed : walkSpeed;
+        _targetSpeed = IsSprinting ? sprintSpeed : walkSpeed;
         
         _currentSpeed = Mathf.SmoothDamp(_currentSpeed, _targetSpeed, ref _speedSmoothVelocity, speedSmoothTime);
 
@@ -96,8 +114,14 @@ public class FirstPersonController : MonoBehaviour
     
     private void HandleJump()
     {
-        if (_shouldJump)
+        if (ShouldJump)
             _moveDirection.y = jumpForce;
+    }
+    
+    private void HandleCrouch()
+    {
+        if (ShouldCrouch)
+            StartCoroutine(CrouchStand());
     }
 
     private void ApplyFinalMovements()
@@ -106,5 +130,34 @@ public class FirstPersonController : MonoBehaviour
             _moveDirection.y += gravity * Time.deltaTime;
         
         _characterController.Move(_moveDirection * Time.deltaTime);
+    }
+    
+    private IEnumerator CrouchStand()
+    {
+        if (_isCrouching && Physics.Raycast(_playerCamera.transform.position, Vector3.up, 1f))
+            yield break;
+            
+        _duringCrouchAnimation = true;
+
+        float timeElapsed = 0f;
+        float targetHeight = _isCrouching ? standingHeight : crouchHeight;
+        float currentHeight = _characterController.height;
+        Vector3 targetCenter = _isCrouching ? standingCenter : crouchingCenter;
+        Vector3 currentCenter = _characterController.center;
+
+        while (timeElapsed < timeToCrouch)
+        {
+            _characterController.height = Mathf.Lerp(currentHeight, targetHeight, timeElapsed / timeToCrouch);
+            _characterController.center = Vector3.Lerp(currentCenter, targetCenter, timeElapsed / timeToCrouch);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        
+        _characterController.height = targetHeight;
+        _characterController.center = targetCenter;
+        
+        _isCrouching = !_isCrouching;
+        
+        _duringCrouchAnimation = false;
     }
 }
