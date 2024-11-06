@@ -1,7 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class FirstPersonController : MonoBehaviour
@@ -11,20 +8,23 @@ public class FirstPersonController : MonoBehaviour
     private bool ShouldJump => Input.GetKeyDown(jumpKey) && _characterController.isGrounded; 
     private bool ShouldCrouch => Input.GetKeyDown(crouchKey) && !_duringCrouchAnimation && _characterController.isGrounded;
     
-    
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
     [SerializeField] private bool canJump = true;
     [SerializeField] private bool canCrouch = true;
+    [SerializeField] private bool canUseHeadbob = true;
+    [SerializeField] private bool canInteract = true;
     
     [Header("Controls")] 
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode crouchKey = KeyCode.Space;
+    [SerializeField] private KeyCode interactKey = KeyCode.E;
 
     [Header("Movement parameters")] 
     [SerializeField] private float walkSpeed = 2.0f;
     [SerializeField] private float sprintSpeed = 6.0f;
+    [SerializeField] private float crouchSpeed = 3.0f;
     [SerializeField] private float speedSmoothTime = 0.15f;
     
     [Header("Look parameters")]
@@ -40,6 +40,26 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float timeToCrouch = 0.5f;
     [SerializeField] private Vector3 crouchingCenter = new Vector3(0, 0.5f, 0);
     [SerializeField] private Vector3 standingCenter = new Vector3(0, 0, 0);
+
+    [Header("Headbob parameters")] 
+    [SerializeField] private float walkBobSpeed = 14f;
+    [SerializeField] private float walkBobAmount = 0.05f;
+    [SerializeField] private float sprintBobSpeed = 18f;
+    [SerializeField] private float sprintBobAmount = 0.01f;
+    [SerializeField] private float crouchBobSpeed = 8f;
+    [SerializeField] private float crouchBobAmount = 0.025f;
+    
+    [Header("Interaction")]
+    [SerializeField] private Vector3 interactionRayPoint = default;
+    [SerializeField] private float interactionDistance = default;
+    [SerializeField] private LayerMask interactionLayer = default;
+    
+    //Interaction
+    private Interactable _currentInteractable;
+    
+    //headBob
+    private float _defaultYpos;
+    private float _timer;
     
     //Crouching
     private bool _isCrouching;
@@ -58,12 +78,13 @@ public class FirstPersonController : MonoBehaviour
     private Vector3 _moveDirection;
     private Vector2 _currentInput;
     
-    private float _rotationX = 0f;
+    private float _rotationX;
     
     void Awake()
     {
         _playerCamera = GetComponentInChildren<Camera>();
         _characterController = GetComponent<CharacterController>();
+        _defaultYpos = _playerCamera.transform.localPosition.y;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -80,6 +101,16 @@ public class FirstPersonController : MonoBehaviour
             
             if (canCrouch)
                 HandleCrouch();
+
+            if (canUseHeadbob)
+                HandleHeadbob();
+
+            if (canInteract)
+            {
+                HandleInteractionCheck();
+                HandleInteractionInput();
+            }
+                
             
             ApplyFinalMovements();
         }
@@ -88,13 +119,13 @@ public class FirstPersonController : MonoBehaviour
     private void HandleMovementInput()
     {
         //seta a velocidade buscada
-        _targetSpeed = IsSprinting ? sprintSpeed : walkSpeed;
+        _targetSpeed = IsSprinting ? sprintSpeed : (_isCrouching ? crouchSpeed : walkSpeed);
         
+        //Armazena velocidade atual e usa speedsmoothVelocity para desacelerar ou acelerar player.
         _currentSpeed = Mathf.SmoothDamp(_currentSpeed, _targetSpeed, ref _speedSmoothVelocity, speedSmoothTime);
 
-        // Atualiza _currentInput com a velocidade interpolada
+        // Atualiza _currentInput com a velocidade 
         _currentInput = new Vector2(_currentSpeed * Input.GetAxis("Vertical"), Input.GetAxis("Horizontal") * _currentSpeed);
-
         
         Debug.Log("Velocidade do personagem: " + _characterController.velocity.magnitude);
 
@@ -122,6 +153,51 @@ public class FirstPersonController : MonoBehaviour
     {
         if (ShouldCrouch)
             StartCoroutine(CrouchStand());
+    }
+    
+    private void HandleHeadbob()
+    {
+        if (!_characterController.isGrounded) return;
+
+        if (Mathf.Abs(_moveDirection.x) > 0.1f || Mathf.Abs(_moveDirection.z) > 0.1f)
+        {
+            _timer += Time.deltaTime * (_isCrouching ? crouchBobSpeed : IsSprinting ? sprintBobSpeed : walkBobSpeed);
+            _playerCamera.transform.localPosition = new Vector3(
+                _playerCamera.transform.localPosition.x,
+                _defaultYpos + Mathf.Sin(_timer) * 
+                (_isCrouching ? crouchBobAmount : IsSprinting ? sprintBobAmount : walkBobAmount),
+                _playerCamera.transform.localPosition.z);
+        }
+    }
+    
+    private void HandleInteractionCheck()
+    {
+        if (Physics.Raycast(_playerCamera.ViewportPointToRay(interactionRayPoint), out RaycastHit hit,
+                interactionDistance))
+        {
+            if (hit.collider.gameObject.layer == 6 && (!_currentInteractable || hit.collider.gameObject.GetInstanceID() != _currentInteractable.GetInstanceID()))
+            {
+                hit.collider.TryGetComponent(out _currentInteractable);
+                
+                if (_currentInteractable)
+                    _currentInteractable.OnFocus();
+            }
+        }
+        else if (_currentInteractable)
+        {
+            _currentInteractable.OnLoseFocus();
+            _currentInteractable = null;
+        }
+    }
+
+    private void HandleInteractionInput()
+    {
+        if (Input.GetKeyDown(interactKey) && _currentInteractable &&
+            Physics.Raycast(_playerCamera.ViewportPointToRay(interactionRayPoint), out RaycastHit hit,
+                interactionDistance, interactionLayer))
+        {
+            _currentInteractable.OnInteract();
+        }
     }
 
     private void ApplyFinalMovements()
