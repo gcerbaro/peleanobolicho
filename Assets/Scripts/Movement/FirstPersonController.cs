@@ -36,9 +36,9 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float gravity = -9.81f;
     
     //crouching
-    private float crouchHeight = 0.5f;
-    private float standingHeight = 2f;
-    private float timeToCrouch = 0.25f;
+    private float _crouchHeight = 0.5f;
+    private float _standingHeight = 2f;
+    private float _timeToCrouch = 0.25f;
     private Vector3 _crouchingCenter = new Vector3(0, 0.5f, 0);
     private Vector3 _standingCenter = new Vector3(0, 0, 0);
 
@@ -242,15 +242,15 @@ public class FirstPersonController : MonoBehaviour
         _duringCrouchAnimation = true;
 
         float timeElapsed = 0f;
-        float targetHeight = _isCrouching ? standingHeight : crouchHeight;
+        float targetHeight = _isCrouching ? _standingHeight : _crouchHeight;
         float currentHeight = _characterController.height;
         Vector3 targetCenter = _isCrouching ? _standingCenter : _crouchingCenter;
         Vector3 currentCenter = _characterController.center;
 
-        while (timeElapsed < timeToCrouch)
+        while (timeElapsed < _timeToCrouch)
         {
-            _characterController.height = Mathf.Lerp(currentHeight, targetHeight, timeElapsed / timeToCrouch);
-            _characterController.center = Vector3.Lerp(currentCenter, targetCenter, timeElapsed / timeToCrouch);
+            _characterController.height = Mathf.Lerp(currentHeight, targetHeight, timeElapsed / _timeToCrouch);
+            _characterController.center = Vector3.Lerp(currentCenter, targetCenter, timeElapsed / _timeToCrouch);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
