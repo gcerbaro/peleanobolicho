@@ -55,6 +55,10 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float interactionDistance;
     [SerializeField] private LayerMask interactionLayer;
     
+    //Animator
+    private Animator _animator;
+    private static readonly int Speed = Animator.StringToHash("Speed");
+    
     //Stamina
     StaminaSystem _staminaSystem;
     private float _currentStamina;
@@ -88,6 +92,7 @@ public class FirstPersonController : MonoBehaviour
     
     void Awake()
     {
+        _animator = GetComponentInChildren<Animator>();
         _staminaSystem = FindObjectOfType<StaminaSystem>();
         _playerCamera = GetComponentInChildren<Camera>();
         _characterController = GetComponent<CharacterController>();
@@ -104,6 +109,7 @@ public class FirstPersonController : MonoBehaviour
         {
             HandleMovementInput();
             HandleMouseLook();
+            HandleAnimations();
 
             if (canJump) 
                 HandleJump();
@@ -150,6 +156,18 @@ public class FirstPersonController : MonoBehaviour
         
         _playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0f, 0f);
         transform.rotation *= Quaternion.Euler(0f, Input.GetAxis("Mouse X") * sensitivity, 0f);
+    }
+
+    private void HandleAnimations()
+    {
+        if (_moveDirection == Vector3.zero)
+        {
+            _animator.SetFloat(Speed, 0, 0.1f, Time.deltaTime);
+        }
+        else if (_moveDirection != Vector3.zero && Input.GetKey(sprintKey))
+        {
+            _animator.SetFloat(Speed, 1,0.1f, Time.deltaTime);
+        }
     }
     
     private void HandleJump()

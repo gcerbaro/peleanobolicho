@@ -546,7 +546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 670454615}
-  detectionRange: 10
+  detectionRadius: 10
   attackRange: 2
   attackCooldown: 1.5
 --- !u!195 &344021354
@@ -709,7 +709,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -905,6 +905,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 373861802}
+  - {fileID: 1176901975}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &670454616
@@ -936,11 +937,11 @@ MonoBehaviour:
   sensitivity: 2
   jumpForce: 5
   gravity: -9.81
-  walkBobSpeed: 14
-  walkBobAmount: 0.05
-  sprintBobSpeed: 19
-  sprintBobAmount: 0.15
-  crouchBobSpeed: 8
+  walkBobSpeed: 10
+  walkBobAmount: 0.01
+  sprintBobSpeed: 15
+  sprintBobAmount: 0.05
+  crouchBobSpeed: 5
   crouchBobAmount: 0.025
   interactionRayPoint: {x: 0, y: 0, z: 0}
   interactionDistance: 0
@@ -1434,6 +1435,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1001114323}
   m_CullTransparentMesh: 1
+--- !u!4 &1176901975 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bc2ebfc09d41d334d88932113fc273b1,
+    type: 3}
+  m_PrefabInstance: {fileID: 2096056854}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1248218158
 GameObject:
   m_ObjectHideFlags: 0
@@ -1905,6 +1912,89 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1999307672}
   m_CullTransparentMesh: 1
+--- !u!1001 &2096056854
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 670454615}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.288
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -381018239109475135, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_Name
+      value: 'Low Poly Arms '
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 6ba2d262804575c47800fd8902757568, type: 2}
+    - target: {fileID: 5866666021909216657, guid: bc2ebfc09d41d334d88932113fc273b1,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bc2ebfc09d41d334d88932113fc273b1, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
