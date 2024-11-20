@@ -94,6 +94,9 @@ public class FirstPersonController : MonoBehaviour
     {
         _animator = GetComponentInChildren<Animator>();
         _staminaSystem = FindObjectOfType<StaminaSystem>();
+        if (_staminaSystem == null)
+        Debug.LogError("StaminaSystem component not found!");
+        
         _playerCamera = GetComponentInChildren<Camera>();
         _characterController = GetComponent<CharacterController>();
         
@@ -228,21 +231,26 @@ public class FirstPersonController : MonoBehaviour
     }
 
     private void HandleStamina()
+{
+    if (_staminaSystem == null)
     {
-        if (_currentInput != Vector2.zero && IsSprinting)
-            
-        {
-            _staminaSystem.UseStamina(Time.deltaTime);
-
-            if (_staminaSystem.CurrentStamina <= 0)
-                canSprint = false;
-        }
-        else
-        {
-            _staminaSystem.StartRegen();
-        }
-
+        Debug.LogError("StaminaSystem is not assigned!");
+        return;
     }
+
+    if (_currentInput != Vector2.zero && IsSprinting)
+    {
+        _staminaSystem.UseStamina(Time.deltaTime);
+
+        if (_staminaSystem.CurrentStamina <= 0)
+            canSprint = false;
+    }
+    else
+    {
+        _staminaSystem.StartRegen();
+    }
+}
+
 
     private void ApplyFinalMovements()
     {
