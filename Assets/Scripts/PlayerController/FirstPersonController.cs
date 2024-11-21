@@ -50,19 +50,24 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float crouchBobSpeed = 8f;
     [SerializeField] private float crouchBobAmount = 0.025f;
     
-    [Header("Interaction")]
-    [SerializeField] private Vector3 interactionRayPoint;
-    [SerializeField] private float interactionDistance;
-    [SerializeField] private LayerMask interactionLayer;
+    [Header("Interaction")] 
+    private Vector3 _interactionRayPoint = new Vector3(0.5f, 0.5f, 0);
+    private float _interactionDistance = 2f;
+    private LayerMask _interactionLayer;
     
     //Animator
     private Animator _animator;
     private static readonly int Speed = Animator.StringToHash("Speed");
+    private float _blendValue = 0.0f; // Valor atual do parâmetro de blend
+    
+    //Health
+    HealthSystem _healthSystem;
+    private float _currentHealth;
+    private float _maxHealth;
     
     //Stamina
     StaminaSystem _staminaSystem;
     private float _currentStamina;
-    //private Coroutine _regeneratingStamina;
     
     //Interaction
     private Interactable _currentInteractable;
@@ -93,14 +98,17 @@ public class FirstPersonController : MonoBehaviour
     void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
+        _interactionLayer = LayerMask.GetMask("Interactable");
         _staminaSystem = FindObjectOfType<StaminaSystem>();
-        if (_staminaSystem == null)
-        Debug.LogError("StaminaSystem component not found!");
-        
+        _healthSystem = FindObjectOfType<HealthSystem>();
         _playerCamera = GetComponentInChildren<Camera>();
         _characterController = GetComponent<CharacterController>();
         
         _defaultYpos = _playerCamera.transform.localPosition.y;
+        
+        // Inicializa variáveis de saúde
+        _currentHealth = _healthSystem.CurrentHealth;
+        _maxHealth = _healthSystem.MaxHealth;
         
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -113,6 +121,7 @@ public class FirstPersonController : MonoBehaviour
             HandleMovementInput();
             HandleMouseLook();
             HandleAnimations();
+            UpdateHealth();
 
             if (canJump) 
                 HandleJump();
@@ -163,20 +172,31 @@ public class FirstPersonController : MonoBehaviour
 
     private void HandleAnimations()
     {
-        if (_moveDirection == Vector3.zero)
+        if (IsSprinting)
         {
-            _animator.SetFloat(Speed, 0, 0.1f, Time.deltaTime);
+            _blendValue = Mathf.Clamp(_blendValue + Time.deltaTime, 0f, 1f); // Incrementa o valor até 1
         }
-        else if (_moveDirection != Vector3.zero && Input.GetKey(sprintKey))
+        else
         {
-            _animator.SetFloat(Speed, 1,0.1f, Time.deltaTime);
+            _blendValue = Mathf.Clamp(_blendValue - Time.deltaTime, 0f, 1f); // Decrementa o valor até 0
         }
+
+        // Atualiza o parâmetro de speed no Animator
+        if (!_animator) Debug.LogError("Animator não encontrado!");
+        _animator.SetFloat(Speed, _blendValue);
+    }
+    
+    private void UpdateHealth()
+    {
+        _currentHealth = _healthSystem.CurrentHealth;
+        _maxHealth = _healthSystem.MaxHealth;
     }
     
     private void HandleJump()
     {
         if (ShouldJump)
-            _moveDirection.y = jumpForce;
+            _moveDirection.y = jumpForce; 
+            
     }
     
     private void HandleCrouch()
@@ -202,8 +222,8 @@ public class FirstPersonController : MonoBehaviour
     
     private void HandleInteractionCheck()
     {
-        if (Physics.Raycast(_playerCamera.ViewportPointToRay(interactionRayPoint), out RaycastHit hit,
-                interactionDistance))
+        if (Physics.Raycast(_playerCamera.ViewportPointToRay(_interactionRayPoint), out RaycastHit hit,
+                _interactionDistance))
         {
             if (hit.collider.gameObject.layer == 6 && (!_currentInteractable || hit.collider.gameObject.GetInstanceID() != _currentInteractable.GetInstanceID()))
             {
@@ -223,35 +243,37 @@ public class FirstPersonController : MonoBehaviour
     private void HandleInteractionInput()
     {
         if (Input.GetKeyDown(interactKey) && _currentInteractable &&
-            Physics.Raycast(_playerCamera.ViewportPointToRay(interactionRayPoint), out RaycastHit hit,
-                interactionDistance, interactionLayer))
+            Physics.Raycast(_playerCamera.ViewportPointToRay(_interactionRayPoint), out RaycastHit hit,
+                _interactionDistance, _interactionLayer))
         {
             _currentInteractable.OnInteract();
         }
     }
 
     private void HandleStamina()
-{
-    if (_staminaSystem == null)
     {
-        Debug.LogError("StaminaSystem is not assigned!");
-        return;
+        
+        if (_currentInput != Vector2.zero && IsSprinting)
+        {
+            _staminaSystem.UseStamina(Time.deltaTime); 
+
+          
+            if (_staminaSystem.CurrentStamina <= 0)
+            {
+                canSprint = false;
+            }
+        }
+        else
+        {
+            _staminaSystem.StartRegen();
+            
+            if (_staminaSystem.CurrentStamina > 0)
+            {
+                canSprint = true;
+            }
+        }
     }
-
-    if (_currentInput != Vector2.zero && IsSprinting)
-    {
-        _staminaSystem.UseStamina(Time.deltaTime);
-
-        if (_staminaSystem.CurrentStamina <= 0)
-            canSprint = false;
-    }
-    else
-    {
-        _staminaSystem.StartRegen();
-    }
-}
-
-
+    
     private void ApplyFinalMovements()
     {
         if (!_characterController.isGrounded) 

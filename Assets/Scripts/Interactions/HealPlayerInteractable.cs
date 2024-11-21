@@ -4,11 +4,17 @@ using UnityEngine;
 
 // Quando for usar algo para interagir tem que colocar a layer 6 (interactable)
 
-public class TestInteractable : Interactable
+public class HealPlayerInteractable : Interactable
 {
+    [SerializeField] private float healAmount = 15f; // Valor de cura ao interagir.
+    
     public override void OnInteract()
     {
         print("Interacting with" + gameObject.name);
+        
+        Actions.onHealLife?.Invoke(healAmount);
+        
+        gameObject.SetActive(false);
     }
 
     public override void OnFocus()

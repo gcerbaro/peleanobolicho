@@ -1,7 +1,6 @@
-﻿using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class testHealth : MonoBehaviour 
+public class TestDamage : MonoBehaviour 
 {
     private void OnTriggerEnter(Collider other)
     {

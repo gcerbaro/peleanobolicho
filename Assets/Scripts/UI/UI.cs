@@ -40,7 +40,7 @@ public class UI : MonoBehaviour
     private void UpdateHealth(float currentHealth)
     {
         _healthSliderRed.value = currentHealth;
-
+        
         // Inicia a Coroutine para atualizar a barra amarela
         StopAllCoroutines(); 
         StartCoroutine(UpdateYellowBar(currentHealth));
@@ -53,16 +53,19 @@ public class UI : MonoBehaviour
 
     private IEnumerator UpdateYellowBar(float targetHealth)
     {
-        while (_healthSliderYellow.value > targetHealth)
+        while (Mathf.Abs(_healthSliderYellow.value - targetHealth) > 0.01f)
         {
             _healthSliderYellow.value = Mathf.SmoothDamp(
-                _healthSliderYellow.value, 
-                targetHealth, 
-                ref _yellowBarVelocity, 
+                _healthSliderYellow.value,
+                targetHealth,
+                ref _yellowBarVelocity,
                 _yellowBarSmoothTime
             );
 
             yield return null;
         }
+        
+        // Garante que o valor final seja alcançado
+        _healthSliderYellow.value = targetHealth;
     }
 }
