@@ -1,6 +1,6 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -16,31 +16,26 @@ public class EnemyBehavior : MonoBehaviour
     private EnemyHealth _enemyHealth;
 
     [Header("Configurações de Detecção e Ataque")]
+    [SerializeField] private float attackBoxHeightOffset = 1f; // Ajuste manual da altura
     [SerializeField] private float detectionRadius = 10f;
     [SerializeField] private float attackCooldown = 1f;
     [SerializeField] private Vector3 attackBoxSize = new Vector3(2f, 2f, 2f);
     [SerializeField] private float attackBoxOffset = 1f;
 
-    private bool _isAttacking = false;
+    public bool _isAttacking = false;
     private float _nextAttackTime = 0f;
+    private bool _isDead = false;
 
-    // Para guardar a posição e rotação inicial do GameObject filho
-    private Vector3 _childInitialPosition;
-    private Quaternion _childInitialRotation;
-    private Transform _childTransform;
+    public event Action<bool, bool> OnCombatStateChanged;
 
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _animator = GetComponentInChildren<Animator>();
+        _animator = GetComponent<Animator>();
         _enemyHealth = GetComponent<EnemyHealth>();
-
-        // Obtém o transform do GameObject filho (aquele que possui o Animator)
-        _childTransform = _animator.transform;
 
         if (_enemyHealth)
         {
-            // Associa os eventos de dano e morte
             _enemyHealth.ApplyDamagetoEnemy += ReactToDamage;
             _enemyHealth.OnEnemyDeath += HandleDeath;
         }
@@ -48,47 +43,53 @@ public class EnemyBehavior : MonoBehaviour
 
     void Update()
     {
-        if (player && _agent.isOnNavMesh)
+        if (_isDead || !player || !_agent.isOnNavMesh) return;
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        // Atualiza o parâmetro de velocidade para a Blend Tree
+        _animator.SetFloat(Speed, _agent.velocity.magnitude);
+
+        if (distanceToPlayer <= detectionRadius)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-            // Atualiza o parâmetro de velocidade para a Blend Tree
-            _animator.SetFloat(Speed, _agent.velocity.magnitude);
-
-            // Verifica se o jogador está dentro do raio de detecção
-            if (distanceToPlayer <= detectionRadius)
+            if (!IsPlayerInAttackRange())
             {
-                if (!IsPlayerInAttackRange())
-                {
-                    // Persegue o jogador
-                    _agent.SetDestination(player.position);
-                    _animator.SetBool(IsFighting, false);
-                }
-                else
-                {
-                    // Prepara para atacar
-                    _animator.SetFloat(Speed, 0f);
-                    _animator.SetBool(IsFighting, true);
-
-                    _agent.ResetPath(); // Para o movimento
-
-                    if (!_isAttacking && Time.time >= _nextAttackTime)
-                    {
-                        StartCoroutine(AttackPlayer());
-                    }
-                }
+                // Persegue o jogador
+                _animator.SetBool(IsFighting, false);
+                SetCombatState(false, false); // Fora de combate
+                _agent.SetDestination(player.position);
             }
             else
             {
-                // Se fora de alcance, parar movimento e animações de luta
-                _animator.SetBool(IsFighting, false);
-                _agent.ResetPath();
+                // Entrou em alcance de ataque
+                _animator.SetFloat(Speed, 0f);
+                _animator.SetBool(IsFighting, true);
+                SetCombatState(true, false); // Está lutando
+
+                _agent.ResetPath(); // Para o movimento
+
+                if (!_isAttacking && Time.time >= _nextAttackTime)
+                {
+                    _isAttacking = true;
+                    SetCombatState(false, true); // Está atacando
+                    _animator.SetTrigger(Attack);
+                    _nextAttackTime = Time.time + attackCooldown; // Define o cooldown
+                }
             }
+        }
+        else
+        {
+            // Sai do alcance de detecção
+            _animator.SetBool(IsFighting, false);
+            SetCombatState(false, false); // Saiu do combate
+            _agent.ResetPath();
         }
     }
 
     private void ReactToDamage(float damage)
     {
+        if (_isDead) return;
+
         if (_animator)
         {
             _animator.SetTrigger(HitReaction);
@@ -97,63 +98,54 @@ public class EnemyBehavior : MonoBehaviour
         if (_agent)
         {
             _agent.isStopped = true;
-            Invoke(nameof(ResumeMovement), 0.5f);
+            Invoke(nameof(ResumeMovement), 1f);
         }
     }
 
     private void HandleDeath()
     {
+        _isDead = true;
+
         if (_animator)
         {
             Debug.Log("Death triggered");
             _animator.SetTrigger(Death); // Ativa a animação de morte
+
+            // Habilita Root Motion para permitir o movimento controlado pela animação
+            _animator.applyRootMotion = true;
         }
 
-        if (_agent) _agent.isStopped = true;
-
-        enabled = false; // Desativa o comportamento do inimigo
+        if (_agent)
+        {
+            _agent.isStopped = true;
+            _agent.enabled = false;
+        }
     }
 
     private void ResumeMovement()
     {
+        if (_isDead) return;
+
         if (_agent)
         {
             _agent.isStopped = false;
         }
     }
 
-    private IEnumerator AttackPlayer()
+    public void ApplyDamage() // Chamado via evento de animação
     {
-        _isAttacking = true;
-
-        if (_animator)
-        {
-            // Salva a posição e rotação inicial do GameObject filho antes do ataque
-            _childInitialPosition = _childTransform.position;
-            _childInitialRotation = _childTransform.rotation;
-
-            _animator.SetTrigger(Attack); // Executa a animação de ataque
-        }
-
-        // Aguarda a duração da animação (ajuste conforme necessário)
-        yield return new WaitForSeconds(1f);
-
-        // Após a animação, restaura a posição e rotação do GameObject filho
-        RestoreChildPositionAndRotation();
-
         if (IsPlayerInAttackRange())
         {
             Actions.onTakeDamage(10); // Aplica dano ao jogador
         }
 
-        _nextAttackTime = Time.time + attackCooldown;
-        yield return new WaitForSeconds(attackCooldown);
-        _isAttacking = false;
+        _isAttacking = false; // Libera o ataque
+        SetCombatState(true, false); // Continua lutando, mas não atacando
     }
 
     private bool IsPlayerInAttackRange()
     {
-        Vector3 boxCenter = transform.position + transform.forward * attackBoxOffset;
+        Vector3 boxCenter = transform.position + transform.forward * attackBoxOffset + Vector3.up * attackBoxHeightOffset;
         Collider[] hitObjects = Physics.OverlapBox(boxCenter, attackBoxSize / 2, transform.rotation);
 
         foreach (Collider obj in hitObjects)
@@ -164,17 +156,20 @@ public class EnemyBehavior : MonoBehaviour
         return false;
     }
 
-    private void RestoreChildPositionAndRotation()
+    private void SetCombatState(bool isFighting, bool isAttacking)
     {
-        // Restaura a posição e rotação do GameObject filho
-        _childTransform.position = _childInitialPosition;
-        _childTransform.rotation = _childInitialRotation;
+        if (_animator.GetBool(IsFighting) != isFighting)
+        {
+            _animator.SetBool(IsFighting, isFighting);
+        }
+
+        OnCombatStateChanged?.Invoke(isFighting, isAttacking);
     }
 
     void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(0f, 0f, 1f, 0.5f);
-        Vector3 boxCenter = transform.position + transform.forward * attackBoxOffset;
+        Vector3 boxCenter = transform.position + transform.forward * attackBoxOffset + Vector3.up * attackBoxHeightOffset;
         Gizmos.DrawCube(boxCenter, attackBoxSize);
     }
 }
