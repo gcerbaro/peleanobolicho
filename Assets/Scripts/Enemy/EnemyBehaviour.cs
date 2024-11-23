@@ -5,29 +5,44 @@ using System.Collections;
 public class EnemyBehavior : MonoBehaviour
 {
     private static readonly int Attack = Animator.StringToHash("Attack");
+    private static readonly int Speed = Animator.StringToHash("Speed");
+    private static readonly int IsFighting = Animator.StringToHash("IsFighting");
+    private static readonly int HitReaction = Animator.StringToHash("HitReaction");
+    private static readonly int Death = Animator.StringToHash("Death");
+
     public Transform player;
     private NavMeshAgent _agent;
     private Animator _animator;
-    private float _animDuration = 0.5f;
+    private EnemyHealth _enemyHealth;
 
     [Header("Configurações de Detecção e Ataque")]
-    [SerializeField] private float detectionRadius = 10f; // Distância de detecção
-    [SerializeField] private float attackCooldown = 1f; // Tempo entre ataques
-    [SerializeField] private Vector3 attackBoxSize = new Vector3(2f, 2f, 2f); // Tamanho da área de ataque
-    [SerializeField] private float attackBoxOffset = 1f; // Distância à frente do inimigo
+    [SerializeField] private float detectionRadius = 10f;
+    [SerializeField] private float attackCooldown = 1f;
+    [SerializeField] private Vector3 attackBoxSize = new Vector3(2f, 2f, 2f);
+    [SerializeField] private float attackBoxOffset = 1f;
 
     private bool _isAttacking = false;
     private float _nextAttackTime = 0f;
 
+    // Para guardar a posição e rotação inicial do GameObject filho
+    private Vector3 _childInitialPosition;
+    private Quaternion _childInitialRotation;
+    private Transform _childTransform;
+
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _animator = GetComponent<Animator>();
+        _animator = GetComponentInChildren<Animator>();
+        _enemyHealth = GetComponent<EnemyHealth>();
 
-        // Configuração inicial do agente de navegação
-        if (_agent)
+        // Obtém o transform do GameObject filho (aquele que possui o Animator)
+        _childTransform = _animator.transform;
+
+        if (_enemyHealth)
         {
-            _agent.stoppingDistance = 0; // Desabilita a parada padrão
+            // Associa os eventos de dano e morte
+            _enemyHealth.ApplyDamagetoEnemy += ReactToDamage;
+            _enemyHealth.OnEnemyDeath += HandleDeath;
         }
     }
 
@@ -37,17 +52,26 @@ public class EnemyBehavior : MonoBehaviour
         {
             float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
+            // Atualiza o parâmetro de velocidade para a Blend Tree
+            _animator.SetFloat(Speed, _agent.velocity.magnitude);
+
             // Verifica se o jogador está dentro do raio de detecção
             if (distanceToPlayer <= detectionRadius)
             {
-                // O inimigo persegue o jogador até ele estar na área de ataque
                 if (!IsPlayerInAttackRange())
                 {
+                    // Persegue o jogador
                     _agent.SetDestination(player.position);
+                    _animator.SetBool(IsFighting, false);
                 }
                 else
                 {
-                    _agent.ResetPath(); // Para de se mover
+                    // Prepara para atacar
+                    _animator.SetFloat(Speed, 0f);
+                    _animator.SetBool(IsFighting, true);
+
+                    _agent.ResetPath(); // Para o movimento
+
                     if (!_isAttacking && Time.time >= _nextAttackTime)
                     {
                         StartCoroutine(AttackPlayer());
@@ -56,9 +80,45 @@ public class EnemyBehavior : MonoBehaviour
             }
             else
             {
-                // Quando o jogador sai da área de detecção, o inimigo para de seguir
+                // Se fora de alcance, parar movimento e animações de luta
+                _animator.SetBool(IsFighting, false);
                 _agent.ResetPath();
             }
+        }
+    }
+
+    private void ReactToDamage(float damage)
+    {
+        if (_animator)
+        {
+            _animator.SetTrigger(HitReaction);
+        }
+
+        if (_agent)
+        {
+            _agent.isStopped = true;
+            Invoke(nameof(ResumeMovement), 0.5f);
+        }
+    }
+
+    private void HandleDeath()
+    {
+        if (_animator)
+        {
+            Debug.Log("Death triggered");
+            _animator.SetTrigger(Death); // Ativa a animação de morte
+        }
+
+        if (_agent) _agent.isStopped = true;
+
+        enabled = false; // Desativa o comportamento do inimigo
+    }
+
+    private void ResumeMovement()
+    {
+        if (_agent)
+        {
+            _agent.isStopped = false;
         }
     }
 
@@ -66,17 +126,24 @@ public class EnemyBehavior : MonoBehaviour
     {
         _isAttacking = true;
 
-        // Inicia a animação de ataque
-        // if (_animator)
-        //     _animator.SetTrigger(Attack);
+        if (_animator)
+        {
+            // Salva a posição e rotação inicial do GameObject filho antes do ataque
+            _childInitialPosition = _childTransform.position;
+            _childInitialRotation = _childTransform.rotation;
 
-        yield return new WaitForSeconds(_animDuration); // Ajuste o tempo conforme a duração da animação
+            _animator.SetTrigger(Attack); // Executa a animação de ataque
+        }
 
-        // Aplica dano ao jogador somente se ele estiver na área de ataque
+        // Aguarda a duração da animação (ajuste conforme necessário)
+        yield return new WaitForSeconds(1f);
+
+        // Após a animação, restaura a posição e rotação do GameObject filho
+        RestoreChildPositionAndRotation();
+
         if (IsPlayerInAttackRange())
         {
-            Actions.onTakeDamage(10); // Ação para causar dano ao jogador
-            Debug.Log($"{gameObject.name} atacou o jogador!");
+            Actions.onTakeDamage(10); // Aplica dano ao jogador
         }
 
         _nextAttackTime = Time.time + attackCooldown;
@@ -86,34 +153,28 @@ public class EnemyBehavior : MonoBehaviour
 
     private bool IsPlayerInAttackRange()
     {
-        // Centro da caixa de ataque
         Vector3 boxCenter = transform.position + transform.forward * attackBoxOffset;
-
-        // Detecta todos os objetos na área da caixa
         Collider[] hitObjects = Physics.OverlapBox(boxCenter, attackBoxSize / 2, transform.rotation);
 
-        // Filtra os objetos para encontrar o jogador pela Tag
         foreach (Collider obj in hitObjects)
         {
-            if (obj.CompareTag("Player")) // Verifica se o objeto possui a tag "Player"
-            {
-                return true;
-            }
+            if (obj.CompareTag("Player")) return true;
         }
 
-        return false; // Nenhum jogador detectado
+        return false;
     }
 
-    private void OnDrawGizmosSelected()
+    private void RestoreChildPositionAndRotation()
     {
-        // Desenha a área de ataque no editor
-        Gizmos.color = Color.blue;
-        Vector3 boxCenter = transform.position + transform.forward * attackBoxOffset;
-        Gizmos.matrix = Matrix4x4.TRS(boxCenter, transform.rotation, Vector3.one);
-        Gizmos.DrawWireCube(Vector3.zero, attackBoxSize);
+        // Restaura a posição e rotação do GameObject filho
+        _childTransform.position = _childInitialPosition;
+        _childTransform.rotation = _childInitialRotation;
+    }
 
-        // Desenha o raio de detecção do inimigo
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(0f, 0f, 1f, 0.5f);
+        Vector3 boxCenter = transform.position + transform.forward * attackBoxOffset;
+        Gizmos.DrawCube(boxCenter, attackBoxSize);
     }
 }

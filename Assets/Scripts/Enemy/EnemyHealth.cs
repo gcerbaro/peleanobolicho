@@ -44,9 +44,6 @@ public class EnemyHealth : MonoBehaviour
 
         // Dispara o evento de morte
         OnEnemyDeath?.Invoke();
-
-        // Remove o objeto do jogo (ou outra lógica de morte)
-        Destroy(gameObject);
     }
 
     // Métodos locais para os eventos
