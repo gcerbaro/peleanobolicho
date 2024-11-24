@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Serialization;
 
 public class EnemyBehavior : MonoBehaviour
@@ -17,8 +19,8 @@ public class EnemyBehavior : MonoBehaviour
     private EnemyHealth _enemyHealth;
     private Collider _collider;
 
-    
-    [Header("Configurações de Detecção e Ataque")] 
+
+    [Header("Configurações de Detecção e Ataque")]
     [SerializeField] private float attackBoxHeightOffset = 1f; // Ajuste manual da altura
     [SerializeField] private float detectionRadius = 10f;
     [SerializeField] private float attackCooldown = 0.5f;
@@ -29,8 +31,12 @@ public class EnemyBehavior : MonoBehaviour
     public bool _isAttacking = false;
     private float _nextAttackTime = 0f;
     private bool _isDead = false;
+    [SerializeField] private Room roomControl;
 
     public event Action<bool, bool> OnCombatStateChanged;
+
+    private AudioSource asource;
+    public AudioClip damageSound;
 
     void Start()
     {
@@ -38,6 +44,15 @@ public class EnemyBehavior : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
         _enemyHealth = GetComponent<EnemyHealth>();
+        asource = GetComponent<AudioSource>();
+
+        // Encontra a sala no pai
+        roomControl = GetComponentInParent<Room>();
+
+        if (roomControl == null)
+        {
+            Debug.LogError("RoomControl não encontrado para o inimigo: " + gameObject.name);
+        }
 
         if (_enemyHealth)
         {
@@ -47,6 +62,7 @@ public class EnemyBehavior : MonoBehaviour
 
         _baseDamage *= DifficultyManager.EnemyDamageMultiplier;
     }
+
 
     void Update()
     {
@@ -93,6 +109,20 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
+    public void AssignRoom(Room room)
+    {
+        roomControl = room;
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (asource != null && clip != null)
+        {
+            asource.clip = clip;
+            asource.Play();
+        }
+    }
+
     private void ReactToDamage(float damage)
     {
         if (_isDead) return;
@@ -100,6 +130,7 @@ public class EnemyBehavior : MonoBehaviour
         if (_animator)
         {
             _animator.SetTrigger(HitReaction);
+
         }
 
         if (_agent)
@@ -107,11 +138,14 @@ public class EnemyBehavior : MonoBehaviour
             _agent.isStopped = true;
             Invoke(nameof(ResumeMovement), 1f);
         }
+        
+        PlaySound(damageSound);
     }
 
     private void HandleDeath()
     {
         _isDead = true;
+        roomControl.OnEnemyDefeated();
 
         if (_animator)
         {
@@ -127,7 +161,7 @@ public class EnemyBehavior : MonoBehaviour
             _agent.isStopped = true;
             _agent.enabled = false;
         }
-        
+
         if (_collider)
         {
             _collider.enabled = false;
