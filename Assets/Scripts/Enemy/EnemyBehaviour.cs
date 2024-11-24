@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -14,14 +15,17 @@ public class EnemyBehavior : MonoBehaviour
     private NavMeshAgent _agent;
     private Animator _animator;
     private EnemyHealth _enemyHealth;
+    private Collider _collider;
 
-    [Header("Configurações de Detecção e Ataque")]
+    
+    [Header("Configurações de Detecção e Ataque")] 
     [SerializeField] private float attackBoxHeightOffset = 1f; // Ajuste manual da altura
     [SerializeField] private float detectionRadius = 10f;
-    [SerializeField] private float attackCooldown = 1f;
+    [SerializeField] private float attackCooldown = 0.5f;
     [SerializeField] private Vector3 attackBoxSize = new Vector3(2f, 2f, 2f);
     [SerializeField] private float attackBoxOffset = 1f;
 
+    private float _baseDamage = 10f;
     public bool _isAttacking = false;
     private float _nextAttackTime = 0f;
     private bool _isDead = false;
@@ -30,6 +34,7 @@ public class EnemyBehavior : MonoBehaviour
 
     void Start()
     {
+        _collider = GetComponent<Collider>();
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
         _enemyHealth = GetComponent<EnemyHealth>();
@@ -39,6 +44,8 @@ public class EnemyBehavior : MonoBehaviour
             _enemyHealth.ApplyDamagetoEnemy += ReactToDamage;
             _enemyHealth.OnEnemyDeath += HandleDeath;
         }
+
+        _baseDamage *= DifficultyManager.EnemyDamageMultiplier;
     }
 
     void Update()
@@ -120,6 +127,11 @@ public class EnemyBehavior : MonoBehaviour
             _agent.isStopped = true;
             _agent.enabled = false;
         }
+        
+        if (_collider)
+        {
+            _collider.enabled = false;
+        }
     }
 
     private void ResumeMovement()
@@ -136,7 +148,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         if (IsPlayerInAttackRange())
         {
-            Actions.onTakeDamage(10); // Aplica dano ao jogador
+            Actions.onTakeDamage(_baseDamage); // Aplica dano ao jogador
         }
 
         _isAttacking = false; // Libera o ataque

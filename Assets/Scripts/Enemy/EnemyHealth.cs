@@ -13,6 +13,7 @@ public class EnemyHealth : MonoBehaviour
 
     private void Start()
     {
+        MaxHealth *= DifficultyManager.EnemyHealthMultiplier;
         // Configura a vida inicial
         CurrentHealth = MaxHealth;
 

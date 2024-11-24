@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: 1b7ee7ca3f7630844962207904aefb23
+guid: e3f27025bf4b13841bc2846bd0e3d699
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cloth
+    second: {fileID: 2100000, guid: 64bce1db1d02a3147abec6192d12effd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Skin
+    second: {fileID: 2100000, guid: 12f3616581644434fa8d8c339a53501b, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -42,8 +52,8 @@ ModelImporter:
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
     importPhysicalCameras: 1
-    importVisibility: 0
-    importBlendShapes: 0
+    importVisibility: 1
+    importBlendShapes: 1
     importCameras: 0
     importLights: 0
     nodeNameCollisionStrategy: 1
@@ -388,25 +398,25 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: LowPolyArms(Clone)
+    - name: LowPolyArmsModel(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Human Arms Model
-      parentName: LowPolyArms(Clone)
+      parentName: LowPolyArmsModel(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0.000000021854284, y: 0.011353777, z: 0.000000001773625, w: 0.99993557}
       scale: {x: 1, y: 1, z: 1}
     - name: Human FP
-      parentName: LowPolyArms(Clone)
+      parentName: LowPolyArmsModel(Clone)
       position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+      rotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Root
       parentName: Human FP
       position: {x: 0.0022047828, y: -0.013250288, z: -0.003417611}
-      rotation: {x: -0.00000002310561, y: 0.011353776, z: 0.0000000019017734, w: 0.99993557}
+      rotation: {x: -0.000000023105608, y: 0.011353776, z: 0.0000000019017734, w: 0.99993557}
       scale: {x: 1, y: 1, z: 1}
     - name: Bicep.L
       parentName: Root
@@ -420,24 +430,23 @@ ModelImporter:
       scale: {x: 0.99999946, y: 0.9999999, z: 1}
     - name: Palm.L
       parentName: Forearm.L
-      position: {x: 5.820766e-11, y: 0.2884908, z: -0.000000002386514}
-      rotation: {x: 0.009058559, y: -0.0003535619, z: 0.014179819, w: 0.9998584}
+      position: {x: -5.820766e-11, y: 0.2884908, z: -0.0000000019790605}
+      rotation: {x: 0.00905856, y: -0.00035356192, z: 0.014179819, w: 0.9998584}
       scale: {x: 1, y: 1, z: 1}
     - name: Pinky1.L
       parentName: Palm.L
-      position: {x: 0.0072546676, y: 0.091674455, z: -0.031863045}
-      rotation: {x: -0.007771989, y: -0.000483757, z: 0.0006484403, w: 0.99996954}
+      position: {x: 0.007254671, y: 0.091674455, z: -0.03186304}
+      rotation: {x: -0.007772148, y: -0.00048374917, z: 0.0006484673, w: 0.9999695}
       scale: {x: 1, y: 1, z: 1}
     - name: Pinky2.L
       parentName: Pinky1.L
-      position: {x: 0.0000000023283064, y: 0.02723571, z: 0.000000015075784}
-      rotation: {x: 0.000000078085584, y: 0.00000009173529, z: -0.000000073225245,
-        w: 1}
+      position: {x: -0.0000000016298145, y: 0.02723571, z: 0.000000015017577}
+      rotation: {x: 0.00000007788186, y: 0.000000091735295, z: -0.000000072876, w: 1}
       scale: {x: 0.99999994, y: 0.9999999, z: 0.99999994}
     - name: Pinky3.L
       parentName: Pinky2.L
-      position: {x: -0.0000000041909516, y: 0.023416452, z: -0.000000003812602}
-      rotation: {x: -0.00000014028046, y: -0.00000011618249, z: 0.0000000121071935,
+      position: {x: -0.000000015599653, y: 0.023416452, z: -0.0000000038708095}
+      rotation: {x: -0.0000001405133, y: -0.00000011618249, z: 0.000000012572855,
         w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Pinky3.L_end
@@ -448,18 +457,18 @@ ModelImporter:
     - name: Ring1.L
       parentName: Palm.L
       position: {x: 0.0069629955, y: 0.09383042, z: -0.011040812}
-      rotation: {x: -0.0041053337, y: 0.00026267127, z: 0.009538063, w: 0.99994606}
+      rotation: {x: -0.0041055223, y: 0.00026268433, z: 0.0095381485, w: 0.9999461}
       scale: {x: 1, y: 1, z: 1}
     - name: Ring2.L
       parentName: Ring1.L
-      position: {x: 0.000000007916242, y: 0.036188852, z: -0.0000000031141099}
-      rotation: {x: 0.000000016472768, y: -0.000000004656613, z: -0.000000062864274,
+      position: {x: 0.000000007799827, y: 0.036188852, z: 0.00000001169974}
+      rotation: {x: 0.000000020023435, y: -0.000000005122274, z: -0.00000006263144,
         w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Ring3.L
       parentName: Ring2.L
-      position: {x: 0.000000007566996, y: 0.0357535, z: 0.000000010302756}
-      rotation: {x: -0.0000001558219, y: 0.000000020023434, z: 0.000000065658234,
+      position: {x: 0.0000000073341653, y: 0.0357535, z: 0.000000010186341}
+      rotation: {x: -0.00000015605472, y: 0.000000020023435, z: 0.00000006589107,
         w: 1}
       scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
     - name: Ring3.L_end
@@ -470,18 +479,18 @@ ModelImporter:
     - name: Middle1.L
       parentName: Palm.L
       position: {x: 0.00687504, y: 0.09375428, z: 0.011596017}
-      rotation: {x: 0.010759043, y: 0.0006198953, z: 0.028086893, w: 0.9995475}
+      rotation: {x: 0.010759034, y: 0.0006198954, z: 0.028086893, w: 0.9995475}
       scale: {x: 1, y: 1, z: 1}
     - name: Middle2.L
       parentName: Middle1.L
-      position: {x: 0.0000000023283064, y: 0.04159907, z: 0.0000000034924597}
-      rotation: {x: 0.00000010972146, y: 0.000000016239941, z: -0.000000036161513,
+      position: {x: 0.0000000022700988, y: 0.04159907, z: 0.000000003434252}
+      rotation: {x: 0.00000010948863, y: 0.000000016181733, z: -0.000000036132413,
         w: 1}
       scale: {x: 0.9999999, y: 0.9999999, z: 0.9999998}
     - name: Middle3.L
       parentName: Middle2.L
-      position: {x: 4.656613e-10, y: 0.040060554, z: -0.000000002386514}
-      rotation: {x: -0.00000007584458, y: -0.0000000014551917, z: -0.000000011059456,
+      position: {x: 3.4924597e-10, y: 0.040060554, z: -0.0000000025029294}
+      rotation: {x: -0.00000007607741, y: -0.0000000015133995, z: -0.0000000110158,
         w: 1}
       scale: {x: 0.99999994, y: 1, z: 0.99999994}
     - name: Middle3.L_end
@@ -492,18 +501,18 @@ ModelImporter:
     - name: Index1.L
       parentName: Palm.L
       position: {x: 0.0069597024, y: 0.09196223, z: 0.03182152}
-      rotation: {x: 0.0747068, y: 0.00007629294, z: 0.047107484, w: 0.99609226}
+      rotation: {x: 0.0747068, y: 0.00007629286, z: 0.047107484, w: 0.99609226}
       scale: {x: 1, y: 1, z: 1}
     - name: Index2.L
       parentName: Index1.L
-      position: {x: -0.0000000048603397, y: 0.033816226, z: -0.000000007043127}
-      rotation: {x: -0.000000113213915, y: 0.00000013713726, z: -0.00000007910422,
+      position: {x: -0.000000004831236, y: 0.033816226, z: -0.0000000071013346}
+      rotation: {x: -0.00000011338854, y: 0.00000013713726, z: -0.00000007939525,
         w: 1}
       scale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
     - name: Index3.L
       parentName: Index2.L
-      position: {x: 0.0000000041909516, y: 0.03062013, z: -0.000000006868504}
-      rotation: {x: -0.00000016129343, y: 0.000000026775524, z: -0.000000019790605,
+      position: {x: 0.0000000042491592, y: 0.03062013, z: -0.0000000069849193}
+      rotation: {x: -0.00000016152624, y: 0.000000026775524, z: -0.000000020023435,
         w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Index3.L_end
@@ -513,18 +522,18 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: Thumb1.L
       parentName: Palm.L
-      position: {x: -0.015667273, y: 0.03712098, z: 0.030921195}
-      rotation: {x: 0.48933357, y: -0.056438286, z: -0.001755187, w: 0.87026685}
+      position: {x: -0.015667273, y: 0.03712098, z: 0.030921193}
+      rotation: {x: 0.48933363, y: -0.05643827, z: -0.0017551546, w: 0.8702668}
       scale: {x: 1, y: 1, z: 0.99999994}
     - name: Thumb2.L
       parentName: Thumb1.L
-      position: {x: 0.0000000037252903, y: 0.016881393, z: -0.0000000012805685}
-      rotation: {x: -0.022474227, y: 0.0052051316, z: 0.02960838, w: 0.99929535}
+      position: {x: 0.0000000037252903, y: 0.016881393, z: -0.0000000014551915}
+      rotation: {x: -0.02247417, y: 0.0052051283, z: 0.029608382, w: 0.9992954}
       scale: {x: 0.99999994, y: 0.99999994, z: 1}
     - name: Thumb3.L
       parentName: Thumb2.L
-      position: {x: -0.0000000037252903, y: 0.021899058, z: -0.0000000013969839}
-      rotation: {x: -0.030655686, y: 0.08408692, z: 0.0075297016, w: 0.99595827}
+      position: {x: -0.0000000037252903, y: 0.021899058, z: -0.0000000027939677}
+      rotation: {x: -0.030655835, y: 0.08408695, z: 0.0075297854, w: 0.99595827}
       scale: {x: 1, y: 0.9999999, z: 0.9999999}
     - name: Thumb3.L_end
       parentName: Thumb3.L
@@ -539,7 +548,7 @@ ModelImporter:
     - name: Forearm.R
       parentName: Bicep.R
       position: {x: 0.0000000014551915, y: 0.2793796, z: 0.0000000017607817}
-      rotation: {x: 0.057814825, y: -0.000022593642, z: 0.00774681, w: 0.9982973}
+      rotation: {x: 0.057814825, y: -0.000022593647, z: 0.0077468096, w: 0.9982973}
       scale: {x: 0.99999964, y: 0.99999976, z: 0.9999999}
     - name: Palm.R
       parentName: Forearm.R
@@ -549,7 +558,7 @@ ModelImporter:
     - name: Pinky1.R
       parentName: Palm.R
       position: {x: -0.0072546657, y: 0.091674395, z: -0.031863023}
-      rotation: {x: -0.00777194, y: 0.0004837584, z: -0.00064870913, w: 0.99996954}
+      rotation: {x: -0.00777194, y: 0.00048375828, z: -0.00064870727, w: 0.99996954}
       scale: {x: 1, y: 0.99999994, z: 1}
     - name: Pinky2.R
       parentName: Pinky1.R
@@ -560,7 +569,7 @@ ModelImporter:
     - name: Pinky3.R
       parentName: Pinky2.R
       position: {x: -1.1641532e-10, y: 0.023416407, z: 0.00000002013985}
-      rotation: {x: 0.0000005012844, y: 0.00000011536758, z: 0.000000008032657, w: 1}
+      rotation: {x: 0.0000005012844, y: 0.00000011536757, z: 0.000000008032657, w: 1}
       scale: {x: 1, y: 1, z: 1.0000001}
     - name: Pinky3.R_end
       parentName: Pinky3.R
@@ -570,17 +579,17 @@ ModelImporter:
     - name: Ring1.R
       parentName: Palm.R
       position: {x: -0.006962992, y: 0.09383035, z: -0.011040806}
-      rotation: {x: -0.0041058017, y: -0.0002625857, z: -0.009538925, w: 0.99994606}
+      rotation: {x: -0.0041058017, y: -0.00026258573, z: -0.009538924, w: 0.99994606}
       scale: {x: 0.99999994, y: 0.9999999, z: 0.99999994}
     - name: Ring2.R
       parentName: Ring1.R
       position: {x: -0.000000003783498, y: 0.036188815, z: 0.0000000048603397}
-      rotation: {x: 0.0000002548768, y: 0.00000000547152, z: 0.00000008640927, w: 1}
+      rotation: {x: 0.0000002548768, y: 0.0000000054715197, z: 0.00000008640927, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Ring3.R
       parentName: Ring2.R
       position: {x: -2.3283064e-10, y: 0.035753515, z: -0.0000000016589183}
-      rotation: {x: -0.00000042039028, y: -0.000000020721927, z: -0.00000013917452,
+      rotation: {x: -0.00000042039028, y: -0.000000020721927, z: -0.0000001391745,
         w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Ring3.R_end
@@ -613,18 +622,18 @@ ModelImporter:
     - name: Index1.R
       parentName: Palm.R
       position: {x: -0.006959697, y: 0.09196207, z: 0.031821515}
-      rotation: {x: 0.074706584, y: -0.00007629087, z: -0.047107402, w: 0.9960923}
+      rotation: {x: 0.07470659, y: -0.00007629092, z: -0.047107402, w: 0.9960923}
       scale: {x: 0.99999994, y: 0.9999999, z: 0.9999999}
     - name: Index2.R
       parentName: Index1.R
       position: {x: 6.91216e-11, y: 0.033816263, z: -0.00000000721775}
-      rotation: {x: 0.000000047875798, y: -0.0000001352455, z: -0.000000012762029,
+      rotation: {x: 0.000000047875794, y: -0.0000001352455, z: -0.000000012762028,
         w: 1}
       scale: {x: 1, y: 1.0000001, z: 1}
     - name: Index3.R
       parentName: Index2.R
       position: {x: -0.0000000019826984, y: 0.030620223, z: -0.000000003245077}
-      rotation: {x: 0.00000018685387, y: -0.000000027212081, z: -0.00000009202995,
+      rotation: {x: 0.00000018685385, y: -0.000000027212081, z: -0.00000009202996,
         w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Index3.R_end
@@ -655,7 +664,7 @@ ModelImporter:
     - name: IK Arm Pole.L
       parentName: Root
       position: {x: -0.5067973, y: -0.01956165, z: -0.31247473}
-      rotation: {x: 0.49868548, y: 0.50131106, z: -0.501311, w: -0.4986855}
+      rotation: {x: 0.49868548, y: 0.50131106, z: -0.501311, w: -0.49868554}
       scale: {x: 1, y: 1, z: 1}
     - name: IK Arm Pole.L_end
       parentName: IK Arm Pole.L
@@ -665,7 +674,7 @@ ModelImporter:
     - name: IK Arm Target.L
       parentName: Root
       position: {x: -0.81210506, y: -0.01343152, z: -0.041780196}
-      rotation: {x: 0.29166287, y: -0.31014195, z: 0.6524717, w: 0.6269174}
+      rotation: {x: 0.29166284, y: -0.3101419, z: 0.6524717, w: 0.6269174}
       scale: {x: 1, y: 1, z: 1}
     - name: IK Arm Target.L_end
       parentName: IK Arm Target.L
@@ -675,7 +684,7 @@ ModelImporter:
     - name: IK Arm Pole.R
       parentName: Root
       position: {x: 0.5067973, y: -0.019561647, z: -0.31247476}
-      rotation: {x: -0.49868548, y: 0.50131106, z: -0.501311, w: 0.4986855}
+      rotation: {x: -0.49868548, y: 0.50131106, z: -0.501311, w: 0.49868554}
       scale: {x: 1, y: 1, z: 1}
     - name: IK Arm Pole.R_end
       parentName: IK Arm Pole.R
@@ -685,7 +694,7 @@ ModelImporter:
     - name: IK Arm Target.R
       parentName: Root
       position: {x: 0.79478437, y: -0.016617298, z: -0.004408332}
-      rotation: {x: 0.00000005572167, y: 0.00000007339787, z: -0.68981904, w: 0.72398186}
+      rotation: {x: 0.000000055721667, y: 0.00000007339787, z: -0.68981904, w: 0.72398186}
       scale: {x: 1, y: 1, z: 1}
     - name: IK Arm Target.R_end
       parentName: IK Arm Target.R

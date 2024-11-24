@@ -7,12 +7,15 @@ public class KnifeAttack : MonoBehaviour
 
     [Header("Configurações de Ataque com Faca")]
     [SerializeField] private float knifeDamage = 15f; 
-    [SerializeField] private float knifeAttackRange = 2f; 
-    [SerializeField] private Vector3 knifeAttackBoxSize = new Vector3(2f, 2f, 3f); 
-    [SerializeField] private Vector3 attackBoxOffset = new Vector3(0f, 0f, 1f);
-    [SerializeField] private KeyCode knifeAttackKey = KeyCode.Mouse0; 
+    [SerializeField] private float knifeAttackRange = 2f;  
+    [SerializeField] private float knifeDurability = 7f; // Durabilidade da faca
+    [SerializeField] private Vector3 knifeAttackBoxSize = new Vector3(2f, 2f, 3f); //Define tamanho da caixa de ataque
+    [SerializeField] private Vector3 attackBoxOffset = new Vector3(0f, 0f, 1f); //Offset em relacao ao player para caixa de ataque
+    [SerializeField] private KeyCode knifeAttackKey = KeyCode.Mouse0; // Botao de ataque 
     [SerializeField] private float attackCooldown = 0.5f; // Tempo entre ataques
     [SerializeField] private float damageDelay = 0.2f; // Atraso antes do dano
+    
+    
     [SerializeField] private GameObject lowPolyArms; 
     [SerializeField] private GameObject knifeInPlayer; 
     [SerializeField] private Animator animator;
@@ -35,6 +38,16 @@ public class KnifeAttack : MonoBehaviour
                 Attack();
             }
         }
+    }
+    
+    private bool CanUseKnife()
+    {
+        if (!lowPolyArms || !knifeInPlayer)
+        {
+            Debug.Log("LPA ou KnifeInPlayer nao encontrado");
+        }
+        // Checa se LPA está inativo e KnifeInPlayer está ativo
+        return !lowPolyArms.activeSelf && knifeInPlayer.activeSelf;
     }
 
     private void Attack()
@@ -67,6 +80,8 @@ public class KnifeAttack : MonoBehaviour
             transform.rotation,
             _enemyLayer);
 
+        bool hitOneEnemy = false;
+        
         // Aplica dano aos inimigos detectados
         if (hitEnemies.Length > 0)
         {
@@ -76,20 +91,32 @@ public class KnifeAttack : MonoBehaviour
                 if (enemyHealth)
                 {
                     enemyHealth.TakeDamage(knifeDamage);
+                    hitOneEnemy = true;
                     Debug.Log($"{enemy.name} tomou {knifeDamage} de dano da faca.");
                 }
             }
         }
-        else
+        
+        // Reduz a durabilidade apenas se ao menos um inimigo foi atingido
+        if (hitOneEnemy)
         {
-            Debug.Log("Nenhum inimigo detectado, mas ataque foi realizado.");
+            knifeDurability--;
+            Debug.Log($"Durabilidade da faca: {knifeDurability}");
+
+            if (knifeDurability <= 0)
+            {
+                BreakKnife();
+            }
         }
     }
     
-    private bool CanUseKnife()
+    private void BreakKnife()
     {
-        // Checa se LPA está inativo e KnifeInPlayer está ativo
-        return !lowPolyArms.activeSelf && knifeInPlayer.activeSelf;
+        Debug.Log("A faca quebrou!");
+
+        // Desativa a faca e ativa as mãos
+        knifeInPlayer.SetActive(false);
+        lowPolyArms.SetActive(true);
     }
 
     private void OnDrawGizmosSelected()

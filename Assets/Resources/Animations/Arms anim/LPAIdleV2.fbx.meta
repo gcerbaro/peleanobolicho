@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 17660d6a64147d4489ffb44c3b4a8fab
+guid: 85756774d9a49ad45aa167e19fd5ac74
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,9 +33,9 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Human FP|Run
-      takeName: Human FP|Run
-      internalID: -3951123199803926910
+      name: Human FP|Idle
+      takeName: Human FP|Idle
+      internalID: -6044788168558869653
       firstFrame: 0
       lastFrame: 25
       wrapMode: 0
@@ -124,7 +124,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 1b7ee7ca3f7630844962207904aefb23,
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: e3f27025bf4b13841bc2846bd0e3d699,
     type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
