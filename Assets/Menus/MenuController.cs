@@ -5,7 +5,7 @@ public class GameManager : MonoBehaviour
 {
     public GameObject difficultyPanel; // Painel de dificuldade
     public GameObject menu;            // Painel do menu inicial
-
+    private DifficultyManager difficultyManager;
     private void Awake()
     {
         ServiceLocator.Reset(); // Reseta qualquer serviço do seu jogo
@@ -43,12 +43,20 @@ public class GameManager : MonoBehaviour
     // Métodos para selecionar dificuldades (você pode adicionar lógica específica)
     public void SelectMedium()
     {
+        difficultyManager.SetDifficulty(Normal);
         Debug.Log("Dificuldade Medium selecionada.");
         BackToMenu(); // Retorna ao menu após selecionar
     }
 
+    public void SelectEasy(){
+        difficultyManager.SetDifficulty(Easy);
+        Debug.Log("Dificuldade Easy selecionada.");
+        BackToMenu();
+    }
+
     public void SelectHard()
     {
+        difficultyManager.SetDifficulty(Hard);
         Debug.Log("Dificuldade Hard selecionada.");
         BackToMenu(); // Retorna ao menu após selecionar
     }
