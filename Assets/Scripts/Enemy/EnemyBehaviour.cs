@@ -193,6 +193,8 @@ public class EnemyBehavior : MonoBehaviour
     {
         _isDead = true;
         roomControl.OnEnemyDefeated();
+        ScoreManager.Instance.AddScore(1);
+        Debug.Log(ScoreManager.Instance.GetScore());
 
         if (_animator)
         {
