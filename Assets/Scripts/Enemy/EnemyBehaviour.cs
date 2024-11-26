@@ -90,8 +90,9 @@ public class EnemyBehavior : MonoBehaviour
         // Executa metodo dos passos
         HandleFootsteps();
         
-        if (distanceToPlayer <= detectionRadius)
+        if (distanceToPlayer <= detectionRadius && HasLineOfSight(player))
         {
+            // Persegue ou ataca o jogador com base na distância
             if (!IsPlayerInAttackRange())
             {
                 // Persegue o jogador
@@ -110,16 +111,16 @@ public class EnemyBehavior : MonoBehaviour
 
                 if (!isAttacking && Time.time >= _nextAttackTime)
                 {
-                    isAttacking = true; //Ativa "estado" de ataque
+                    isAttacking = true; // Ativa "estado" de ataque
                     SetCombatState(false, true); // Está atacando
-                    _animator.SetTrigger(Attack); //Ativa animacao de ataque
+                    _animator.SetTrigger(Attack); // Ativa animação de ataque
                     _nextAttackTime = Time.time + attackCooldown; // Define o cooldown
                 }
             }
         }
         else
         {
-            // Sai do alcance de detecção
+            // Sai do alcance de detecção ou está obstruído
             _animator.SetBool(IsFighting, false);
             SetCombatState(false, false); // Saiu do combate
             _agent.ResetPath();
@@ -262,11 +263,40 @@ public class EnemyBehavior : MonoBehaviour
 
         foreach (Collider obj in hitObjects)
         {
-            if (obj.CompareTag("Player")) return true;
+            if (obj.CompareTag("Player") && HasLineOfSight(obj.transform))
+            {
+                return true;
+            }
         }
 
         return false;
     }
+
+    
+    private bool HasLineOfSight(Transform target)
+    {
+        // Define a origem do raycast (posição do inimigo)
+        Vector3 origin = transform.position + Vector3.up * 1.5f; // Ajuste a altura para a cabeça do inimigo
+
+        // Calcula a direção do raycast
+        Vector3 direction = (target.position - origin).normalized;
+
+        // Comprimento do raycast
+        float distance = Vector3.Distance(origin, target.position);
+
+        // Raycast para verificar obstruções
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
+        {
+            // Verifica se o objeto atingido é o jogador
+            if (hit.collider.CompareTag("Player"))
+            {
+                return true; // Linha de visão clara
+            }
+        }
+
+        return false; // Algo está bloqueando a visão
+    }
+
 
     private void SetCombatState(bool isFighting, bool attacking)
     {
