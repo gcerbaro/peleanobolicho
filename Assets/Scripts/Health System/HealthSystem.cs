@@ -5,17 +5,21 @@ public class HealthSystem : MonoBehaviour
 {
     public float MaxHealth { get; private set; } = 100f;
     public float CurrentHealth { get; private set; }
+    
+    private float isInfiniteHealth = 0f;
 
     private void OnEnable()
     {
         Actions.onTakeDamage += TakeDamage;
         Actions.onHealLife += HealLife;
+        Actions.onInfiniteLife += SetInfiniteHealth;
     }
 
     private void OnDisable()
     {
         Actions.onTakeDamage -= TakeDamage;
         Actions.onHealLife -= HealLife;
+        Actions.onInfiniteLife -= SetInfiniteHealth;
     }
 
     private void Start()
@@ -25,6 +29,8 @@ public class HealthSystem : MonoBehaviour
 
     private void TakeDamage(float damage)
     {
+        if (isInfiniteHealth == 1) return;
+        
         CurrentHealth = Mathf.Max(CurrentHealth - damage, 0);
         Debug.Log("Cheguei no take damage");
         
@@ -37,6 +43,8 @@ public class HealthSystem : MonoBehaviour
     
     private void HealLife(float healAmount)
     {
+        if (isInfiniteHealth == 1) return;
+        
         if (CurrentHealth >= MaxHealth)
             return;
 
@@ -45,6 +53,16 @@ public class HealthSystem : MonoBehaviour
     
         // Invoca o evento para atualizar a UI
         Actions.onHeal?.Invoke(CurrentHealth);
+    }
+    
+    public void SetInfiniteHealth(float f)
+    {
+        isInfiniteHealth = f;
+
+        if (isInfiniteHealth == 1)
+        {
+            CurrentHealth = MaxHealth; // Restaura a vida ao máximo
+        }
     }
 
 

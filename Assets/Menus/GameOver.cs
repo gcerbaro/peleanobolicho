@@ -16,10 +16,13 @@ public class GameOver : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene("TestSCENE");
+        ScoreManager.Instance.ResetScore();
+        
     }
 
     public void ReturnToMenu(){
         SceneManager.LoadScene("Menu");
+        ScoreManager.Instance.ResetScore();
     }
 
     public void QuitGame(){
