@@ -17,6 +17,10 @@ public class GameOver : MonoBehaviour
         SceneManager.LoadScene("TestSCENE");
     }
 
+    public void ReturnToMenu(){
+        SceneManager.LoadScene("Menu");
+    }
+
     public void QuitGame(){
          // For editor testing, use this line to stop play mode:
         #if UNITY_EDITOR

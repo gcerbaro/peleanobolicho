@@ -16,8 +16,8 @@ public class DifficultyManager : MonoBehaviour
         switch (difficulty)
         {
             case Difficulty.Easy:
-                EnemyHealthMultiplier = 0.75f;
-                EnemyDamageMultiplier = 0.75f;
+                EnemyHealthMultiplier = 0.70f;
+                EnemyDamageMultiplier = 0.70f;
                 PlayerDamageMultiplier = 1.25f;
                 break;
             case Difficulty.Normal:
@@ -28,7 +28,7 @@ public class DifficultyManager : MonoBehaviour
             case Difficulty.Hard:
                 EnemyHealthMultiplier = 2f;
                 EnemyDamageMultiplier = 2f;
-                PlayerDamageMultiplier = 0.75f;
+                PlayerDamageMultiplier = 1f;
                 break;
         }
     }

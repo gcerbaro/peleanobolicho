@@ -1645,7 +1645,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 102760097}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: SelectEasy
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2503,7 +2503,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 102760097}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: SelectMedium
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
