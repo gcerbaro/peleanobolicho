@@ -40,6 +40,9 @@ public class EnemyBehavior : MonoBehaviour
     [Header("Outras configuracoes")]
     [SerializeField] private Room roomControl;
     [SerializeField] private GameObject knifeInPlayer;
+
+    [Header("Sangue na facada")]
+    public ParticleSystem bloodEffect;
     
     private float _baseDamage = 10f;
     private bool isAttacking;
@@ -171,7 +174,8 @@ public class EnemyBehavior : MonoBehaviour
             if (knifeInPlayer.activeSelf) 
             {
                 //Audio so para hits com a faca ativa
-                SoundFXManager.instance.PlayRandomSoundEffects(knifeHitSoundClips, transform, 0.7f); 
+                SoundFXManager.instance.PlayRandomSoundEffects(knifeHitSoundClips, transform, 0.7f);
+                Instantiate(bloodEffect, transform.position + Vector3.up * 1f, Quaternion.identity);
             }
             
             SoundFXManager.instance.PlayRandomSoundEffects(damageSoundClips,transform, 0.7f); // Audio de hit
