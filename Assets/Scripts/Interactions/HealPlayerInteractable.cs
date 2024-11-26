@@ -7,12 +7,14 @@ using UnityEngine;
 public class HealPlayerInteractable : Interactable
 {
     [SerializeField] private float healAmount = 15f; // Valor de cura ao interagir.
+    [SerializeField] private AudioClip bonusSound;
     
     public override void OnInteract()
     {
         print("Interacting with" + gameObject.name);
         
         Actions.onHealLife?.Invoke(healAmount);
+        SoundFXManager.instance.PlaySoundEffect(bonusSound, transform, 0.5f);
         
         gameObject.SetActive(false);
     }

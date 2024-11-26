@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -29,11 +31,13 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] private AudioClip[] attackSoundClips;
     [SerializeField] private AudioClip[] damageSoundClips;
     [SerializeField] private AudioClip[] deathSoundClips;
+    [SerializeField] private AudioClip[] knifeHitSoundClips;
+    [SerializeField] private AudioClip knifeExtraDeathSound;
     
     [Header("Outras configuracoes")]
     [SerializeField] private Room roomControl;
+    [SerializeField] private GameObject knifeInPlayer;
     
-
     private float _baseDamage = 10f;
     private bool isAttacking;
     private float _nextAttackTime;
@@ -95,7 +99,6 @@ public class EnemyBehavior : MonoBehaviour
                     isAttacking = true; //Ativa "estado" de ataque
                     SetCombatState(false, true); // Está atacando
                     _animator.SetTrigger(Attack); //Ativa animacao de ataque
-                    SoundFXManager.instance.PlaySoundEffect(airSwooshClip,transform,0.3f);
                     _nextAttackTime = Time.time + attackCooldown; // Define o cooldown
                 }
             }
@@ -121,7 +124,15 @@ public class EnemyBehavior : MonoBehaviour
         if (_animator)
         {
             _animator.SetTrigger(HitReaction);
-            SoundFXManager.instance.PlayRandomSoundEffects(damageSoundClips,transform, 1f); // Audio de hit
+            
+            // Se a faca estiver ativa
+            if (knifeInPlayer.activeSelf) 
+            {
+                //Audio so para hits com a faca ativa
+                SoundFXManager.instance.PlayRandomSoundEffects(knifeHitSoundClips, transform, 0.7f); 
+            }
+            
+            SoundFXManager.instance.PlayRandomSoundEffects(damageSoundClips,transform, 0.7f); // Audio de hit
         }
 
         if (_agent)
@@ -140,10 +151,21 @@ public class EnemyBehavior : MonoBehaviour
         {
             Debug.Log("Death triggered");
             _animator.SetTrigger(Death); // Ativa a animação de morte
-
-            SoundFXManager.instance.PlayRandomSoundEffects(deathSoundClips,transform,1f);
+            
             // Habilita Root Motion para permitir o movimento controlado pela animação
             _animator.applyRootMotion = true;
+            
+            // Cria novo array para adicionar novo som apenas aqui
+            AudioClip[] currentSounds = deathSoundClips;
+
+            //Adiciona som apenas se faca estiver ativa
+            if (knifeInPlayer.activeSelf)
+            {
+                currentSounds.Append(knifeExtraDeathSound);
+            }
+            
+            //Reproz sons de morte
+            SoundFXManager.instance.PlayRandomSoundEffects(currentSounds,transform,1f);
         }
 
         if (_agent)
@@ -171,10 +193,16 @@ public class EnemyBehavior : MonoBehaviour
     // Chamado via evento de animação
     public void ApplyDamage() 
     {
+        SoundFXManager.instance.PlaySoundEffect(airSwooshClip,transform,0.3f);
         if (IsPlayerInAttackRange())
         {
             Actions.onTakeDamage(_baseDamage); // Aplica dano ao jogador
-            SoundFXManager.instance.PlayRandomSoundEffects(attackSoundClips,transform, 1f); // Audio de ataque
+                
+            // Audio de ataque de soco 
+            SoundFXManager.instance.PlayRandomSoundEffects(attackSoundClips,transform, 1f); 
+            
+            // Audio de dano no player
+            SoundFXManager.instance.PlayRandomSoundEffects(damageSoundClips,player.transform, 1f); 
         }
 
         isAttacking = false; // Libera o ataque

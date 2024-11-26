@@ -35,7 +35,7 @@ public class SoundFXManager : MonoBehaviour
     
     public void PlayRandomSoundEffects(AudioClip[] audioClip, Transform spawnTransform, float volume)
     {
-        int rand = Random.Range(0, (audioClip.Length-1));
+        int rand = Random.Range(0, (audioClip.Length));
         
         AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
         

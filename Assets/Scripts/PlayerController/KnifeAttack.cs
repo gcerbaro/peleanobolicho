@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class KnifeAttack : MonoBehaviour
@@ -15,6 +16,11 @@ public class KnifeAttack : MonoBehaviour
     [SerializeField] private float attackCooldown = 0.5f; // Tempo entre ataques
     [SerializeField] private float damageDelay = 0.2f; // Atraso antes do dano
     
+    [Header("Configuracoes de audio")]
+    [SerializeField] private AudioClip[] knifeHitsSfx;
+    [SerializeField] private AudioClip breakToolSfx;
+    
+    [Header("Outras configuracoes")]
     [SerializeField] private GameObject lowPolyArms; 
     [SerializeField] private GameObject knifeInPlayer; 
     [SerializeField] private Animator animator;
@@ -117,6 +123,8 @@ public class KnifeAttack : MonoBehaviour
     {
         Debug.Log("A faca quebrou!");
 
+        SoundFXManager.instance.PlaySoundEffect(breakToolSfx,transform, 0.5f);
+        
         // Desativa a faca e ativa as mãos
         knifeInPlayer.SetActive(false);
         lowPolyArms.SetActive(true);

@@ -5,12 +5,16 @@ using UnityEngine.Serialization;
 public class ItemInteraction: Interactable
 {
     private Material[] _originalMaterials;
-    [SerializeField] private Material highlightMaterial;
     private Renderer _objectRenderer;
     private bool _isHighlighted = false;
 
     private GameObject _lowPolyArms;
     private GameObject _knifeInPlayer;
+    
+    [SerializeField] private Material highlightMaterial;
+    
+    [Header("Audio clips")]
+    [SerializeField] private AudioClip knifeEquipSfx;
 
     public new void Awake()
     {
@@ -86,8 +90,14 @@ public class ItemInteraction: Interactable
     // Chamado ao interagir
     public override void OnInteract()
     {
-        _lowPolyArms.SetActive(false);
-        _knifeInPlayer.SetActive(true);
+        if (!_knifeInPlayer.activeSelf && _lowPolyArms.activeSelf)
+        {
+            SoundFXManager.instance.PlaySoundEffect(knifeEquipSfx, transform, 0.5f);
+            _lowPolyArms.SetActive(false);
+            _knifeInPlayer.SetActive(true);
+        }
+        
+        
         
         gameObject.SetActive(false);
     }
