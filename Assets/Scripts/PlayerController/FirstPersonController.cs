@@ -15,6 +15,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private bool canUseHeadbob = true;
     [SerializeField] private bool canInteract = true;
     [SerializeField] private bool useStamina = true;
+    [SerializeField] private bool useFootsteps = true;
     
     [Header("Controls")] 
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -24,9 +25,9 @@ public class FirstPersonController : MonoBehaviour
 
     [Header("Movement parameters")] 
     [SerializeField] private float walkSpeed = 2.0f;
-    [SerializeField] private float sprintSpeed = 6.0f;
-    [SerializeField] private float crouchSpeed = 3.0f;
     [SerializeField] private float speedSmoothTime = 0.15f;
+    private float sprintSpeed = 6.0f;
+    private float crouchSpeed = 3.0f;
     
     [Header("Look parameters")]
     [SerializeField] private float sensitivity = 2f;
@@ -41,7 +42,7 @@ public class FirstPersonController : MonoBehaviour
     private float _timeToCrouch = 0.25f;
     private Vector3 _crouchingCenter = new Vector3(0, 0.5f, 0);
     private Vector3 _standingCenter = new Vector3(0, 0, 0);
-
+    
     [Header("Headbob parameters")] 
     [SerializeField] private float walkBobSpeed = 14f;
     [SerializeField] private float walkBobAmount = 0.05f;
@@ -49,6 +50,19 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float sprintBobAmount = 0.01f;
     [SerializeField] private float crouchBobSpeed = 8f;
     [SerializeField] private float crouchBobAmount = 0.025f;
+    
+    [Header("Footstep parameters")]
+    [SerializeField] private float baseStepSpeed = 0.5f;
+    [SerializeField] private float crouchStepMultiplier = 1.5f;
+    [SerializeField] private float speedStepMultiplier = 0.6f;
+    [SerializeField] private AudioClip woodFootstepSound;
+    [SerializeField] private AudioClip stoneFootstepSound;
+    
+    //private variables
+    private float _footstepTimer = 0f;
+    private float _footstepVolume = 0.3f;
+    private float GetCurrentOffset => _isCrouching ? baseStepSpeed * crouchStepMultiplier : 
+                                       IsSprinting ? baseStepSpeed * speedStepMultiplier : baseStepSpeed;
     
     [Header("Interaction")] 
     private Vector3 _interactionRayPoint = new Vector3(0.5f, 0.5f, 0);
@@ -112,6 +126,10 @@ public class FirstPersonController : MonoBehaviour
         
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
+        //movement variables
+        sprintSpeed = walkSpeed * 2;
+        crouchSpeed = walkSpeed * 0.5f;
     }
     
     void Update()
@@ -132,6 +150,9 @@ public class FirstPersonController : MonoBehaviour
             if (canUseHeadbob)
                 HandleHeadbob();
 
+            if (useFootsteps)
+                HandleFootsteps();
+            
             if (canInteract)
             {
                 HandleInteractionCheck();
@@ -217,6 +238,32 @@ public class FirstPersonController : MonoBehaviour
                 _defaultYpos + Mathf.Sin(_timer) * 
                 (_isCrouching ? crouchBobAmount : IsSprinting ? sprintBobAmount : walkBobAmount),
                 _playerCamera.transform.localPosition.z);
+        }
+    }
+
+    private void HandleFootsteps()
+    {
+        if (!_characterController.isGrounded) return;
+        if (_currentInput == Vector2.zero) return;
+        
+        _footstepTimer -= Time.deltaTime;
+
+        if (_footstepTimer <= 0)
+        {
+            if (Physics.Raycast(_playerCamera.transform.position, Vector3.down, out RaycastHit hit, 3))
+            {
+                switch (hit.collider.tag)
+                {
+                    case "Footsteps/Wood":
+                        SoundFXManager.instance.PlaySoundEffect(woodFootstepSound, transform, _footstepVolume);
+                        break;
+                    case "Footsteps/Stone":
+                        SoundFXManager.instance.PlaySoundEffect(stoneFootstepSound, transform, _footstepVolume);
+                        break;
+                }
+            }
+
+            _footstepTimer = GetCurrentOffset;
         }
     }
     
