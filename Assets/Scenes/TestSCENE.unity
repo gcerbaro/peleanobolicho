@@ -1086,6 +1086,7 @@ MonoBehaviour:
   - {fileID: 1254863983}
   connectedDoors: []
   doorTriggers: []
+  isFinalRoom: 1
 --- !u!1001 &29897453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3878,6 +3879,7 @@ MonoBehaviour:
   - {fileID: 1580168872}
   doorTriggers:
   - {fileID: 841359917}
+  isFinalRoom: 0
 --- !u!1001 &199196584
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4302,6 +4304,7 @@ MonoBehaviour:
   - {fileID: 1460457699}
   doorTriggers:
   - {fileID: 1629012535}
+  isFinalRoom: 0
 --- !u!1001 &212741357
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6071,6 +6074,7 @@ MonoBehaviour:
   - {fileID: 178001188}
   - {fileID: 1283350784}
   doorTriggers: []
+  isFinalRoom: 0
 --- !u!1001 &304482408
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6573,6 +6577,7 @@ MonoBehaviour:
   - {fileID: 1594449713}
   doorTriggers:
   - {fileID: 2045066000}
+  isFinalRoom: 0
 --- !u!1001 &325035694
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6715,6 +6720,7 @@ MonoBehaviour:
   - {fileID: 1787216878}
   doorTriggers:
   - {fileID: 161537531}
+  isFinalRoom: 0
 --- !u!1 &333313687
 GameObject:
   m_ObjectHideFlags: 0
@@ -7121,7 +7127,7 @@ Transform:
   m_GameObject: {fileID: 353800715}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -12.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12425,6 +12431,7 @@ MonoBehaviour:
   - {fileID: 1594449713}
   doorTriggers:
   - {fileID: 57568579}
+  isFinalRoom: 0
 --- !u!4 &662285371 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 232947611060503947, guid: c9b39dbb5780a124eaf52424cf971832,
@@ -14209,6 +14216,7 @@ MonoBehaviour:
   - {fileID: 586102598}
   doorTriggers:
   - {fileID: 867595741}
+  isFinalRoom: 0
 --- !u!1001 &786431566
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16032,6 +16040,7 @@ MonoBehaviour:
   - {fileID: 1283350784}
   doorTriggers:
   - {fileID: 1531745508}
+  isFinalRoom: 0
 --- !u!4 &887622200 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5874539950745320295, guid: 7b49a02daa39e0041826bab1cd740999,
@@ -26010,6 +26019,7 @@ MonoBehaviour:
   - {fileID: 1564665362}
   doorTriggers:
   - {fileID: 2026173265}
+  isFinalRoom: 0
 --- !u!4 &1526676874 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8508761156825405559, guid: 184d205ad7b7e484ca73918442247db1,
@@ -26393,6 +26403,7 @@ MonoBehaviour:
   - {fileID: 435591586}
   doorTriggers:
   - {fileID: 2010545771}
+  isFinalRoom: 0
 --- !u!1001 &1559232492
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33731,6 +33742,7 @@ MonoBehaviour:
   - {fileID: 1208525247}
   doorTriggers:
   - {fileID: 1285986012}
+  isFinalRoom: 0
 --- !u!1001 &1923843870
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34924,6 +34936,7 @@ MonoBehaviour:
   - {fileID: 1114019236}
   doorTriggers:
   - {fileID: 1912003542}
+  isFinalRoom: 0
 --- !u!4 &1980294850 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4395064114001804457, guid: 189d76de31c52b94ab3d23cd15b33ed6,
@@ -37438,6 +37451,7 @@ MonoBehaviour:
   enemies: []
   connectedDoors: []
   doorTriggers: []
+  isFinalRoom: 0
 --- !u!1001 &2084528032
 PrefabInstance:
   m_ObjectHideFlags: 0
