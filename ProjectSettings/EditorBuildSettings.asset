@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RandomDungeon.unity
     guid: e130a2f84900e0940b68749a1b3ee881
+  - enabled: 1
+    path: Assets/Scenes/Endofgame.unity
+    guid: f5cd8dc8ec0f6534abb9d5c15650d1ad
   m_configObjects: {}

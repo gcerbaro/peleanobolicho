@@ -1,11 +1,13 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class MenuController : MonoBehaviour
 {
     public GameObject difficultyPanel; // Painel de dificuldade
     public GameObject menu;            // Painel do menu inicial
     private DifficultyManager difficultyManager;
+    [SerializeField] private AudioClip clickSound;
     
     private void Awake()
     {
@@ -20,17 +22,26 @@ public class GameManager : MonoBehaviour
         difficultyPanel.SetActive(false);
     }
 
-    public void LoadGame(){
+    private void PlayClickSound()
+    {
+        SoundFXManager.instance.PlaySoundEffect(clickSound,transform,1f);
+    }
+
+    public void LoadGame()
+    {
+        PlayClickSound();
         SceneManager.LoadScene("TestSCENE");
     }
 
     public void LoadRandomDungeon(){
+        PlayClickSound();
         SceneManager.LoadScene("RandomDungeon");
     }
 
     // Método chamado ao clicar no botão "Difficulty"
     public void ShowDifficultyPanel()
     {
+        PlayClickSound();
         menu.SetActive(false); // Desativa o menu inicial
         difficultyPanel.SetActive(true); // Ativa o painel de dificuldade
     }
@@ -38,19 +49,22 @@ public class GameManager : MonoBehaviour
     // Método chamado ao selecionar uma dificuldade ou voltar ao menu
     public void BackToMenu()
     {
+        PlayClickSound();
         difficultyPanel.SetActive(false); // Desativa o painel de dificuldade
         menu.SetActive(true); // Ativa o menu inicial
     }
 
     // Métodos para selecionar dificuldades (você pode adicionar lógica específica)
-    
-    public void SelectEasy(){
+    public void SelectEasy()
+    {
+        PlayClickSound();
         DifficultyManager.SetDifficulty(DifficultyManager.Difficulty.Easy);
         Debug.Log("Dificuldade Easy selecionada.");
         BackToMenu();
     }
     public void SelectMedium()
     {
+        PlayClickSound();
         DifficultyManager.SetDifficulty(DifficultyManager.Difficulty.Normal);
         Debug.Log("Dificuldade Medium selecionada.");
         BackToMenu(); // Retorna ao menu após selecionar
@@ -58,6 +72,7 @@ public class GameManager : MonoBehaviour
     
     public void SelectHard()
     {
+        PlayClickSound();
         DifficultyManager.SetDifficulty(DifficultyManager.Difficulty.Hard);
         Debug.Log("Dificuldade Hard selecionada.");
         BackToMenu(); // Retorna ao menu após selecionar

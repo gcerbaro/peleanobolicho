@@ -33,6 +33,9 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] private AudioClip[] deathSoundClips;
     [SerializeField] private AudioClip[] knifeHitSoundClips;
     [SerializeField] private AudioClip knifeExtraDeathSound;
+    [SerializeField] private AudioClip woodFootstepSound;
+    [SerializeField] private AudioClip stoneFootstepSound;
+    
     
     [Header("Outras configuracoes")]
     [SerializeField] private Room roomControl;
@@ -42,6 +45,11 @@ public class EnemyBehavior : MonoBehaviour
     private bool isAttacking;
     private float _nextAttackTime;
     private bool _isDead;
+    private float _footstepTimer = 0f;
+    
+    //Audio dos passos
+    private float footstepVolume = 0.25f;
+    private float footstepInterval = 0.74f;
 
     public event Action<bool, bool> OnCombatStateChanged;
 
@@ -76,6 +84,9 @@ public class EnemyBehavior : MonoBehaviour
         // Atualiza o parâmetro de velocidade para a Blend Tree
         _animator.SetFloat(Speed, _agent.velocity.magnitude);
 
+        // Executa metodo dos passos
+        HandleFootsteps();
+        
         if (distanceToPlayer <= detectionRadius)
         {
             if (!IsPlayerInAttackRange())
@@ -116,6 +127,37 @@ public class EnemyBehavior : MonoBehaviour
     {
         roomControl = room;
     }
+
+    private void HandleFootsteps()
+    {
+        // Se o inimigo não estiver se movendo, não faça nada
+        if (_agent.velocity.magnitude <= 0f) return;
+
+        // Reduz o tempo do timer
+        _footstepTimer -= Time.deltaTime;
+
+        // Quando o timer chega a zero, reproduz o som do passo
+        if (_footstepTimer <= 0)
+        {
+            // Raycast para detectar o tipo de superfície
+            if (Physics.Raycast(transform.position + Vector3.up * 0.5f, Vector3.down, out RaycastHit hit, 3f))
+            {
+                switch (hit.collider.tag)
+                {
+                    case "Footsteps/Wood":
+                        SoundFXManager.instance.PlaySoundEffect(woodFootstepSound, transform, footstepVolume);
+                        break;
+
+                    case "Footsteps/Stone":
+                        SoundFXManager.instance.PlaySoundEffect(stoneFootstepSound, transform, footstepVolume);
+                        break;
+                }
+            }
+            
+            _footstepTimer = footstepInterval;
+        }
+    }
+
 
     private void ReactToDamage(float damage)
     {

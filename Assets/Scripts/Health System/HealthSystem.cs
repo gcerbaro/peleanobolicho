@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HealthSystem : MonoBehaviour
 {
@@ -51,5 +52,6 @@ public class HealthSystem : MonoBehaviour
     {
         CurrentHealth = 0;
         print("dead");
+        SceneManager.LoadScene("Endofgame");
     }
 }

@@ -58,9 +58,9 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private AudioClip woodFootstepSound;
     [SerializeField] private AudioClip stoneFootstepSound;
     
-    //private variables
+    //Variaveis dos passos
     private float _footstepTimer = 0f;
-    private float _footstepVolume = 0.3f;
+    private float _footstepVolume = 0.25f;
     private float GetCurrentOffset => _isCrouching ? baseStepSpeed * crouchStepMultiplier : 
                                        IsSprinting ? baseStepSpeed * speedStepMultiplier : baseStepSpeed;
     

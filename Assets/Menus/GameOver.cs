@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +7,9 @@ public class GameOver : MonoBehaviour
     void Awake()
     {
         ServiceLocator.Reset();
+        Time.timeScale = 1; // Garante que o jogo não está pausado.
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     // Update is called once per frame
