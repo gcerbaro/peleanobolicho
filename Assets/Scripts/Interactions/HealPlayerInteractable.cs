@@ -8,7 +8,7 @@ public class HealPlayerInteractable : Interactable
     [SerializeField] private float healAmount = 15f; // Valor de cura ao interagir.
     [SerializeField] private AudioClip bonusSound;
     [SerializeField] private HighlightController highlightController;
-
+    [SerializeField] private HealthSystem healthSystem;
     private new void Awake()
     {
         // Verifica se o HighlightController está atribuído. Se não, tenta buscar no objeto.
@@ -19,11 +19,13 @@ public class HealPlayerInteractable : Interactable
             {
                 Debug.LogError("HighlightController não encontrado neste objeto!");
             }
+            healthSystem = GetComponent<HealthSystem>();
         }
     }
 
     public override void OnInteract()
     {
+        if(healthSystem.CurrentHealth == healthSystem.MaxHealth){return;}
         Actions.onHealLife?.Invoke(healAmount); // Aciona o evento para curar a vida.
         SoundFXManager.instance.PlaySoundEffect(bonusSound, transform, 0.5f);
 
