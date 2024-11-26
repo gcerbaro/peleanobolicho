@@ -2847,9 +2847,22 @@ MonoBehaviour:
   attackCooldown: 1.5
   attackBoxSize: {x: 1.5, y: 2, z: 1}
   attackBoxOffset: 1
-  _isAttacking: 0
+  airSwooshClip: {fileID: 8300000, guid: 5d93218c3630a7d42be8ea7ef2832233, type: 3}
+  attackSoundClips:
+  - {fileID: 8300000, guid: d6c30dcecb76bcf45b351a4e565ebcdf, type: 3}
+  - {fileID: 8300000, guid: 639803dd948e60648b08de4e9f3c2fc2, type: 3}
+  - {fileID: 8300000, guid: 9d0fdf2bdc4cc264a9ce53548d6c4a15, type: 3}
+  damageSoundClips:
+  - {fileID: 8300000, guid: e9300ab0738852a489a63693a01e1780, type: 3}
+  - {fileID: 8300000, guid: 46622e5749458eb409c1c7e5781c20c7, type: 3}
+  - {fileID: 8300000, guid: eebac687809460748b01338bb791e09d, type: 3}
+  - {fileID: 8300000, guid: 06d2b57fe1b32c546b9bd613194cf5d8, type: 3}
+  - {fileID: 8300000, guid: f3baa6ec0d92dbe4dbd604ebe98215b4, type: 3}
+  - {fileID: 8300000, guid: b37cf2f65698f174ebf1df0d5902956d, type: 3}
+  deathSoundClips:
+  - {fileID: 8300000, guid: ac663c4de738bb1488ce588c984e1054, type: 3}
+  - {fileID: 8300000, guid: b826c707214dfbf4d8c08bc50812b300, type: 3}
   roomControl: {fileID: 302124686}
-  damageSound: {fileID: 8300000, guid: f6c6b5711d022cc459c76a6bdf63537b, type: 3}
 --- !u!195 &156176254
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -9844,6 +9857,11 @@ MonoBehaviour:
   AttackKey: 324
   attackBoxSize: {x: 1, y: 2, z: 1}
   attackRange: 1
+  punchAirSoundFx: {fileID: 8300000, guid: 5d93218c3630a7d42be8ea7ef2832233, type: 3}
+  punchHitSoundFxs:
+  - {fileID: 8300000, guid: d6c30dcecb76bcf45b351a4e565ebcdf, type: 3}
+  - {fileID: 8300000, guid: 639803dd948e60648b08de4e9f3c2fc2, type: 3}
+  - {fileID: 8300000, guid: 9d0fdf2bdc4cc264a9ce53548d6c4a15, type: 3}
 --- !u!114 &670454618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10868,6 +10886,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3f09e687fcab29b4cbe6473c39916c43,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2559285840627121667, guid: 3f09e687fcab29b4cbe6473c39916c43,
         type: 3}
@@ -18867,6 +18890,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1412047042}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1415830486
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1415830488}
+  - component: {fileID: 1415830487}
+  m_Layer: 0
+  m_Name: SoundFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1415830487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415830486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2a573cc5f96ef4489c9194cdf9b6ceb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFXObject: {fileID: 881539961361427171, guid: cc2d769a794816a478990324ddb1374c,
+    type: 3}
+--- !u!4 &1415830488
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415830486}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1419661803
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27178,6 +27247,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3ba5df55de38cf04d86504dab0da7464,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 3ba5df55de38cf04d86504dab0da7464,
         type: 3}
       propertyPath: m_Controller
@@ -27246,9 +27320,22 @@ MonoBehaviour:
   attackCooldown: 1.5
   attackBoxSize: {x: 1.5, y: 2, z: 1}
   attackBoxOffset: 1
-  _isAttacking: 0
+  airSwooshClip: {fileID: 8300000, guid: 5d93218c3630a7d42be8ea7ef2832233, type: 3}
+  attackSoundClips:
+  - {fileID: 8300000, guid: d6c30dcecb76bcf45b351a4e565ebcdf, type: 3}
+  - {fileID: 8300000, guid: 639803dd948e60648b08de4e9f3c2fc2, type: 3}
+  - {fileID: 8300000, guid: 9d0fdf2bdc4cc264a9ce53548d6c4a15, type: 3}
+  damageSoundClips:
+  - {fileID: 8300000, guid: e9300ab0738852a489a63693a01e1780, type: 3}
+  - {fileID: 8300000, guid: 46622e5749458eb409c1c7e5781c20c7, type: 3}
+  - {fileID: 8300000, guid: eebac687809460748b01338bb791e09d, type: 3}
+  - {fileID: 8300000, guid: 06d2b57fe1b32c546b9bd613194cf5d8, type: 3}
+  - {fileID: 8300000, guid: f3baa6ec0d92dbe4dbd604ebe98215b4, type: 3}
+  - {fileID: 8300000, guid: b37cf2f65698f174ebf1df0d5902956d, type: 3}
+  deathSoundClips:
+  - {fileID: 8300000, guid: b826c707214dfbf4d8c08bc50812b300, type: 3}
+  - {fileID: 8300000, guid: ac663c4de738bb1488ce588c984e1054, type: 3}
   roomControl: {fileID: 302124686}
-  damageSound: {fileID: 8300000, guid: f6c6b5711d022cc459c76a6bdf63537b, type: 3}
 --- !u!195 &1954835910
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -30984,3 +31071,4 @@ SceneRoots:
   - {fileID: 1718814749}
   - {fileID: 27263021}
   - {fileID: 1164851399}
+  - {fileID: 1415830488}

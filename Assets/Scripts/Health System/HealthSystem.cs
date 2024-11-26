@@ -26,7 +26,7 @@ public class HealthSystem : MonoBehaviour
     {
         CurrentHealth = Mathf.Max(CurrentHealth - damage, 0);
         Debug.Log("Cheguei no take damage");
-
+        
         // Invoca o evento de dano para atualizar a UI
         Actions.onDamage?.Invoke(CurrentHealth);
         
@@ -41,9 +41,7 @@ public class HealthSystem : MonoBehaviour
 
         // Limita a vida ao valor máximo permitido
         CurrentHealth = Mathf.Min(CurrentHealth + healAmount, MaxHealth);
-
-        Debug.Log("Cheguei no heal life");
-
+    
         // Invoca o evento para atualizar a UI
         Actions.onHeal?.Invoke(CurrentHealth);
     }

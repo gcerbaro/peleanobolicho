@@ -15,16 +15,17 @@ public class KnifeAttack : MonoBehaviour
     [SerializeField] private float attackCooldown = 0.5f; // Tempo entre ataques
     [SerializeField] private float damageDelay = 0.2f; // Atraso antes do dano
     
-    
     [SerializeField] private GameObject lowPolyArms; 
     [SerializeField] private GameObject knifeInPlayer; 
     [SerializeField] private Animator animator;
     
     private LayerMask _enemyLayer; 
     private float _lastAttackTime = 0f; // Controle de cooldown
+    private PlayerAttack _playerAttack;
 
     private void Start()
     {
+        _playerAttack = GetComponent<PlayerAttack>();
         _enemyLayer = LayerMask.GetMask("Enemy"); 
     }
 
@@ -32,6 +33,7 @@ public class KnifeAttack : MonoBehaviour
     {
         if (CanUseKnife())
         {
+            _playerAttack.enabled = false;
             if (Input.GetKeyDown(knifeAttackKey) && Time.time >= _lastAttackTime + attackCooldown)
             {
                 _lastAttackTime = Time.time; // Atualiza o tempo do último ataque
@@ -47,6 +49,7 @@ public class KnifeAttack : MonoBehaviour
             Debug.Log("LPA ou KnifeInPlayer nao encontrado");
         }
         // Checa se LPA está inativo e KnifeInPlayer está ativo
+        
         return !lowPolyArms.activeSelf && knifeInPlayer.activeSelf;
     }
 
@@ -117,6 +120,7 @@ public class KnifeAttack : MonoBehaviour
         // Desativa a faca e ativa as mãos
         knifeInPlayer.SetActive(false);
         lowPolyArms.SetActive(true);
+        _playerAttack.enabled = true;
     }
 
     private void OnDrawGizmosSelected()

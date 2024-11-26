@@ -29,7 +29,7 @@ public class EnemyHealth : MonoBehaviour
 
         CurrentHealth = Mathf.Max(CurrentHealth - damage, 0);
         Debug.Log($"{gameObject.name} took {damage} damage. Current health: {CurrentHealth}");
-
+        
         // Dispara o evento de dano
         ApplyDamagetoEnemy?.Invoke(damage);
 

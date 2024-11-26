@@ -10,8 +10,12 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private KeyCode AttackKey = KeyCode.Mouse0;
     [SerializeField] private Vector3 attackBoxSize = new Vector3(1.5f, 1.5f, 2f); // Tamanho da área de ataque
     [SerializeField] private float attackRange = 1.5f; // Distância à frente do jogador
-    private LayerMask enemyLayer; // Camada para identificar inimigos
 
+    [Header("Configuracoes de audio")] 
+    [SerializeField] private AudioClip punchAirSoundFx;
+    [SerializeField] private AudioClip[] punchHitSoundFxs;
+    
+    private LayerMask enemyLayer; // Camada para identificar inimigos
     private Animator _animator;
 
     private void Start()
@@ -26,6 +30,11 @@ public class PlayerAttack : MonoBehaviour
         {
             Attack();
         }
+    }
+
+    private void PlayAirAttack()
+    {
+        SoundFXManager.instance.PlaySoundEffect(punchAirSoundFx, transform,0.4f);
     }
 
     private void Attack()
@@ -63,6 +72,7 @@ public class PlayerAttack : MonoBehaviour
             EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
             if (enemyHealth)
             {
+                SoundFXManager.instance.PlayRandomSoundEffects(punchHitSoundFxs, transform, 1f);
                 enemyHealth.TakeDamage(attackDamage);
                 Debug.Log($"{enemy.name} tomou {attackDamage} de dano.");
             }

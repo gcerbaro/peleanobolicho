@@ -180,8 +180,9 @@ GameObject:
   - component: {fileID: 133857845}
   - component: {fileID: 133857844}
   - component: {fileID: 133857843}
+  - component: {fileID: 133857846}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -204,7 +205,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -206.3}
+  m_AnchoredPosition: {x: 0, y: -207}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &133857843
@@ -301,6 +302,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133857841}
   m_CullTransparentMesh: 1
+--- !u!114 &133857846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133857841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c6a04c485bb934ebb485f4f2aaa962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverImageColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeDuration: 0.2
 --- !u!1 &185394410
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,8 +329,9 @@ GameObject:
   - component: {fileID: 185394414}
   - component: {fileID: 185394413}
   - component: {fileID: 185394412}
+  - component: {fileID: 185394415}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Difficulty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -337,7 +354,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -54.3}
+  m_AnchoredPosition: {x: 0, y: -80}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &185394412
@@ -434,6 +451,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 185394410}
   m_CullTransparentMesh: 1
+--- !u!114 &185394415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 185394410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c6a04c485bb934ebb485f4f2aaa962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverImageColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeDuration: 0.2
 --- !u!1 &210003131
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,8 +478,9 @@ GameObject:
   - component: {fileID: 210003135}
   - component: {fileID: 210003134}
   - component: {fileID: 210003133}
+  - component: {fileID: 210003136}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Hard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -470,8 +503,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 232.8, y: -76.6}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 200.6, y: -76.6}
+  m_SizeDelta: {x: 137.4296, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &210003133
 MonoBehaviour:
@@ -567,6 +600,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 210003131}
   m_CullTransparentMesh: 1
+--- !u!114 &210003136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210003131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c6a04c485bb934ebb485f4f2aaa962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverImageColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeDuration: 0.2
 --- !u!1 &271451073
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,8 +864,9 @@ GameObject:
   - component: {fileID: 529230982}
   - component: {fileID: 529230981}
   - component: {fileID: 529230980}
+  - component: {fileID: 529230983}
   m_Layer: 5
-  m_Name: Button
+  m_Name: RandomMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -840,8 +889,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -139.3}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 0, y: -160}
+  m_SizeDelta: {x: 320.0947, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &529230980
 MonoBehaviour:
@@ -937,6 +986,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 529230978}
   m_CullTransparentMesh: 1
+--- !u!114 &529230983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 529230978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c6a04c485bb934ebb485f4f2aaa962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverImageColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeDuration: 0.2
 --- !u!1 &544651382
 GameObject:
   m_ObjectHideFlags: 0
@@ -1507,8 +1571,9 @@ GameObject:
   - component: {fileID: 995574856}
   - component: {fileID: 995574855}
   - component: {fileID: 995574854}
+  - component: {fileID: 995574857}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Easy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1531,8 +1596,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -307, y: -76.6}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -200, y: -76.6}
+  m_SizeDelta: {x: 130.3653, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &995574854
 MonoBehaviour:
@@ -1628,6 +1693,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 995574852}
   m_CullTransparentMesh: 1
+--- !u!114 &995574857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 995574852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c6a04c485bb934ebb485f4f2aaa962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverImageColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeDuration: 0.2
 --- !u!1 &1233122854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1953,7 +2033,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -2065,8 +2145,9 @@ GameObject:
   - component: {fileID: 1409651262}
   - component: {fileID: 1409651261}
   - component: {fileID: 1409651260}
+  - component: {fileID: 1409651263}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Start
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2089,8 +2170,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 15.8}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -0.000014305, y: 0.000012398}
+  m_SizeDelta: {x: 126.3285, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1409651260
 MonoBehaviour:
@@ -2186,6 +2267,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409651258}
   m_CullTransparentMesh: 1
+--- !u!114 &1409651263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1409651258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c6a04c485bb934ebb485f4f2aaa962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverImageColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeDuration: 0.2
 --- !u!1 &1795314240
 GameObject:
   m_ObjectHideFlags: 0
@@ -2333,8 +2429,9 @@ GameObject:
   - component: {fileID: 1895972243}
   - component: {fileID: 1895972242}
   - component: {fileID: 1895972241}
+  - component: {fileID: 1895972244}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Medium
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2357,8 +2454,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -25, y: -76.6}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -0.000021935, y: -76.6}
+  m_SizeDelta: {x: 169.7241, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1895972241
 MonoBehaviour:
@@ -2382,12 +2479,12 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
+    m_FadeDuration: 1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
@@ -2454,6 +2551,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895972239}
   m_CullTransparentMesh: 1
+--- !u!114 &1895972244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895972239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c6a04c485bb934ebb485f4f2aaa962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverImageColor: {r: 1, g: 1, b: 1, a: 1}
+  hoverTextColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeDuration: 0.2
 --- !u!1 &1916503397
 GameObject:
   m_ObjectHideFlags: 0

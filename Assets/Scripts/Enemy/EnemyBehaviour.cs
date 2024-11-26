@@ -1,9 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Serialization;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -18,7 +15,7 @@ public class EnemyBehavior : MonoBehaviour
     private Animator _animator;
     private EnemyHealth _enemyHealth;
     private Collider _collider;
-
+    
 
     [Header("Configurações de Detecção e Ataque")]
     [SerializeField] private float attackBoxHeightOffset = 1f; // Ajuste manual da altura
@@ -26,17 +23,23 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] private float attackCooldown = 0.5f;
     [SerializeField] private Vector3 attackBoxSize = new Vector3(2f, 2f, 2f);
     [SerializeField] private float attackBoxOffset = 1f;
+    
+    [Header("Audios")]
+    [SerializeField] private AudioClip airSwooshClip;
+    [SerializeField] private AudioClip[] attackSoundClips;
+    [SerializeField] private AudioClip[] damageSoundClips;
+    [SerializeField] private AudioClip[] deathSoundClips;
+    
+    [Header("Outras configuracoes")]
+    [SerializeField] private Room roomControl;
+    
 
     private float _baseDamage = 10f;
-    public bool _isAttacking = false;
-    private float _nextAttackTime = 0f;
-    private bool _isDead = false;
-    [SerializeField] private Room roomControl;
+    private bool isAttacking;
+    private float _nextAttackTime;
+    private bool _isDead;
 
     public event Action<bool, bool> OnCombatStateChanged;
-
-    private AudioSource asource;
-    public AudioClip damageSound;
 
     void Start()
     {
@@ -44,15 +47,11 @@ public class EnemyBehavior : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
         _enemyHealth = GetComponent<EnemyHealth>();
-        asource = GetComponent<AudioSource>();
 
         // Encontra a sala no pai
         roomControl = GetComponentInParent<Room>();
 
-        if (roomControl == null)
-        {
-            Debug.LogError("RoomControl não encontrado para o inimigo: " + gameObject.name);
-        }
+        if (!roomControl) Debug.LogError("RoomControl não encontrado para o inimigo: " + gameObject.name);
 
         if (_enemyHealth)
         {
@@ -91,11 +90,12 @@ public class EnemyBehavior : MonoBehaviour
 
                 _agent.ResetPath(); // Para o movimento
 
-                if (!_isAttacking && Time.time >= _nextAttackTime)
+                if (!isAttacking && Time.time >= _nextAttackTime)
                 {
-                    _isAttacking = true;
+                    isAttacking = true; //Ativa "estado" de ataque
                     SetCombatState(false, true); // Está atacando
-                    _animator.SetTrigger(Attack);
+                    _animator.SetTrigger(Attack); //Ativa animacao de ataque
+                    SoundFXManager.instance.PlaySoundEffect(airSwooshClip,transform,0.3f);
                     _nextAttackTime = Time.time + attackCooldown; // Define o cooldown
                 }
             }
@@ -114,15 +114,6 @@ public class EnemyBehavior : MonoBehaviour
         roomControl = room;
     }
 
-    private void PlaySound(AudioClip clip)
-    {
-        if (asource != null && clip != null)
-        {
-            asource.clip = clip;
-            asource.Play();
-        }
-    }
-
     private void ReactToDamage(float damage)
     {
         if (_isDead) return;
@@ -130,7 +121,7 @@ public class EnemyBehavior : MonoBehaviour
         if (_animator)
         {
             _animator.SetTrigger(HitReaction);
-
+            SoundFXManager.instance.PlayRandomSoundEffects(damageSoundClips,transform, 1f); // Audio de hit
         }
 
         if (_agent)
@@ -138,8 +129,6 @@ public class EnemyBehavior : MonoBehaviour
             _agent.isStopped = true;
             Invoke(nameof(ResumeMovement), 1f);
         }
-        
-        PlaySound(damageSound);
     }
 
     private void HandleDeath()
@@ -152,6 +141,7 @@ public class EnemyBehavior : MonoBehaviour
             Debug.Log("Death triggered");
             _animator.SetTrigger(Death); // Ativa a animação de morte
 
+            SoundFXManager.instance.PlayRandomSoundEffects(deathSoundClips,transform,1f);
             // Habilita Root Motion para permitir o movimento controlado pela animação
             _animator.applyRootMotion = true;
         }
@@ -178,14 +168,16 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
-    public void ApplyDamage() // Chamado via evento de animação
+    // Chamado via evento de animação
+    public void ApplyDamage() 
     {
         if (IsPlayerInAttackRange())
         {
             Actions.onTakeDamage(_baseDamage); // Aplica dano ao jogador
+            SoundFXManager.instance.PlayRandomSoundEffects(attackSoundClips,transform, 1f); // Audio de ataque
         }
 
-        _isAttacking = false; // Libera o ataque
+        isAttacking = false; // Libera o ataque
         SetCombatState(true, false); // Continua lutando, mas não atacando
     }
 
@@ -202,14 +194,14 @@ public class EnemyBehavior : MonoBehaviour
         return false;
     }
 
-    private void SetCombatState(bool isFighting, bool isAttacking)
+    private void SetCombatState(bool isFighting, bool attacking)
     {
         if (_animator.GetBool(IsFighting) != isFighting)
         {
             _animator.SetBool(IsFighting, isFighting);
         }
 
-        OnCombatStateChanged?.Invoke(isFighting, isAttacking);
+        OnCombatStateChanged?.Invoke(isFighting, attacking);
     }
 
     void OnDrawGizmosSelected()
