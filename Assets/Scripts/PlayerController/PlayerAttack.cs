@@ -10,10 +10,12 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private KeyCode AttackKey = KeyCode.Mouse0;
     [SerializeField] private Vector3 attackBoxSize = new Vector3(1.5f, 1.5f, 2f); // Tamanho da área de ataque
     [SerializeField] private float attackRange = 1.5f; // Distância à frente do jogador
+    private float _damageMultiplier = 1f;
 
     [Header("Configuracoes de audio")] 
     [SerializeField] private AudioClip punchAirSoundFx;
     [SerializeField] private AudioClip[] punchHitSoundFxs;
+    
     
     private LayerMask enemyLayer; // Camada para identificar inimigos
     private Animator _animator;
@@ -51,6 +53,8 @@ public class PlayerAttack : MonoBehaviour
 
     private void PerformAttack()
     {
+        float finalDamage = attackDamage * _damageMultiplier;
+        
         // Calcula o centro da caixa de ataque
         Vector3 attackBoxCenter = transform.position + transform.forward * attackRange;
 
@@ -73,10 +77,15 @@ public class PlayerAttack : MonoBehaviour
             if (enemyHealth)
             {
                 SoundFXManager.instance.PlayRandomSoundEffects(punchHitSoundFxs, transform, 1f);
-                enemyHealth.TakeDamage(attackDamage);
-                Debug.Log($"{enemy.name} tomou {attackDamage} de dano.");
+                enemyHealth.TakeDamage(finalDamage);
+                Debug.Log($"{enemy.name} tomou {finalDamage} de dano.");
             }
         }
+    }
+    
+    public void SetSuperStrength(bool isActive)
+    {
+        _damageMultiplier = isActive ? 15f : 1f;
     }
 
     private void OnDrawGizmosSelected()

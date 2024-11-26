@@ -29,6 +29,7 @@ public class KnifeAttack : MonoBehaviour
     private LayerMask _enemyLayer; 
     private float _lastAttackTime = 0f; // Controle de cooldown
     private PlayerAttack _playerAttack;
+    private bool _canAttack = false;
 
     private void Start()
     {
@@ -38,7 +39,7 @@ public class KnifeAttack : MonoBehaviour
 
     private void Update()
     {
-        if (CanUseKnife())
+        if (CanUseKnife() && _canAttack)
         {
             _playerAttack.enabled = false;
             if (Input.GetKeyDown(knifeAttackKey) && Time.time >= _lastAttackTime + attackCooldown)
@@ -51,6 +52,9 @@ public class KnifeAttack : MonoBehaviour
     
     private bool CanUseKnife()
     {
+        if (!_canAttack)
+            _canAttack = true;
+        
         if (!lowPolyArms || !knifeInPlayer)
         {
             Debug.Log("LPA ou KnifeInPlayer nao encontrado");
@@ -121,10 +125,12 @@ public class KnifeAttack : MonoBehaviour
     }
     private IEnumerator BreakKnifeWithDelay()
     {
+        _canAttack = false;
         Debug.Log("A faca quebrou, aguardando animação...");
         yield return new WaitForSeconds(knifeBreakDelay);
 
         BreakKnife();
+        _canAttack = true;
     }
 
     
