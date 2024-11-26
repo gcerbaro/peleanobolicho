@@ -9,7 +9,7 @@ public class KnifeAttack : MonoBehaviour
     [Header("Configurações de Ataque com Faca")]
     [SerializeField] private float knifeDamage = 15f; 
     [SerializeField] private float knifeAttackRange = 2f;  
-    [SerializeField] private float knifeDurability = 7f; // Durabilidade da faca
+    [SerializeField] public float knifeDurability = 8f; // Durabilidade da faca
     [SerializeField] private Vector3 knifeAttackBoxSize = new Vector3(2f, 2f, 3f); //Define tamanho da caixa de ataque
     [SerializeField] private Vector3 attackBoxOffset = new Vector3(0f, 0f, 1f); //Offset em relacao ao player para caixa de ataque
     [SerializeField] private KeyCode knifeAttackKey = KeyCode.Mouse0; // Botao de ataque 
@@ -25,6 +25,7 @@ public class KnifeAttack : MonoBehaviour
     [SerializeField] private GameObject knifeInPlayer; 
     [SerializeField] private Animator animator;
     
+    private float knifeBreakDelay = 0.5f; // Tempo antes de quebrar a faca (duração da animação)
     private LayerMask _enemyLayer; 
     private float _lastAttackTime = 0f; // Controle de cooldown
     private PlayerAttack _playerAttack;
@@ -114,10 +115,18 @@ public class KnifeAttack : MonoBehaviour
 
             if (knifeDurability <= 0)
             {
-                BreakKnife();
+                StartCoroutine(BreakKnifeWithDelay());
             }
         }
     }
+    private IEnumerator BreakKnifeWithDelay()
+    {
+        Debug.Log("A faca quebrou, aguardando animação...");
+        yield return new WaitForSeconds(knifeBreakDelay);
+
+        BreakKnife();
+    }
+
     
     private void BreakKnife()
     {
@@ -129,6 +138,7 @@ public class KnifeAttack : MonoBehaviour
         knifeInPlayer.SetActive(false);
         lowPolyArms.SetActive(true);
         _playerAttack.enabled = true;
+        knifeDurability = 8f;
     }
 
     private void OnDrawGizmosSelected()

@@ -2,8 +2,8 @@
 
 public class ItemInteraction : Interactable
 {
-    private GameObject _lowPolyArms;
-    private GameObject _knifeInPlayer;
+    [SerializeField] private GameObject lowPolyArms;
+    [SerializeField]private GameObject knifeInPlayer;
 
     [Header("Highlight Controller")]
     [SerializeField] private HighlightController highlightController; // Controller de Highlight.
@@ -13,17 +13,14 @@ public class ItemInteraction : Interactable
 
     public new void Awake()
     {
-        // Inicializa objetos de referência
-        _lowPolyArms = GameObject.Find("LowPolyArms");
-        _knifeInPlayer = GameObject.Find("KnifeInPlayer");
 
-        if (!_lowPolyArms || !_knifeInPlayer)
+        if (!lowPolyArms || !knifeInPlayer)
         {
             Debug.LogError("LowPolyArms ou KnifeInPlayer não encontrados na cena!");
         }
 
-        _knifeInPlayer.SetActive(false);
-        _lowPolyArms.SetActive(true);
+        knifeInPlayer.SetActive(false);
+        lowPolyArms.SetActive(true);
 
         // Configura a camada como interagível
         gameObject.layer = 6;
@@ -43,7 +40,6 @@ public class ItemInteraction : Interactable
     public override void OnFocus()
     {
         Debug.Log("Foco no item.");
-        highlightController.enabled = true;
         highlightController?.EnableHighlight();
     }
 
@@ -58,11 +54,11 @@ public class ItemInteraction : Interactable
     public override void OnInteract()
     {
         Debug.Log("Interagindo com o item.");
-        if (!_knifeInPlayer.activeSelf && _lowPolyArms.activeSelf)
+        if (!knifeInPlayer.activeSelf && lowPolyArms.activeSelf)
         {
             SoundFXManager.instance.PlaySoundEffect(knifeEquipSfx, transform, 0.5f);
-            _lowPolyArms.SetActive(false);
-            _knifeInPlayer.SetActive(true);
+            lowPolyArms.SetActive(false);
+            knifeInPlayer.SetActive(true);
         }
 
         gameObject.SetActive(false);
