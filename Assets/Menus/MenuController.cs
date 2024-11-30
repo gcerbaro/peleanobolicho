@@ -4,10 +4,15 @@ using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
-    public GameObject difficultyPanel; // Painel de dificuldade
-    public GameObject menu;            // Painel do menu inicial
+    [SerializeField] GameObject difficultyPanel; // Painel de dificuldade
+    [SerializeField] GameObject menu;            // Painel do menu inicial
+    [SerializeField] GameObject about;
+    [SerializeField] GameObject main;
+    
     private DifficultyManager difficultyManager;
     [SerializeField] private AudioClip clickSound;
+
+    private bool isVisible;
     
     private void Awake()
     {
@@ -20,6 +25,7 @@ public class MenuController : MonoBehaviour
         // Inicia com o menu ativo e o painel de dificuldade desativado
         menu.SetActive(true);
         difficultyPanel.SetActive(false);
+        about.SetActive(false);
     }
 
     private void PlayClickSound()
@@ -76,5 +82,14 @@ public class MenuController : MonoBehaviour
         DifficultyManager.SetDifficulty(DifficultyManager.Difficulty.Hard);
         Debug.Log("Dificuldade Hard selecionada.");
         BackToMenu(); // Retorna ao menu após selecionar
+    }
+
+    public void ShowAbout()
+    {
+        PlayClickSound();
+
+        isVisible = !isVisible;
+        about.SetActive(isVisible);
+        main.SetActive(!isVisible);
     }
 }
