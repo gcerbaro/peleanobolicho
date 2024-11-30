@@ -21,7 +21,7 @@
         - ![Screenshot_2](https://github.com/user-attachments/assets/196be624-4f74-4768-bd2c-21a619cb4bf4)
     - Opção 2:
         - Baixe e extraia o arquivo .zip:
-        - ![Screenshot_7](https://github.com/user-attachments/assets/703003e1-d7bc-45b7-a3ef-732b1defd886)
+        - ![Screenshot_1](https://github.com/user-attachments/assets/33c17677-f619-4182-82f4-27a811557bdf)
         - Adicione o projeto direto no Unity Hub através da opção "add project from disk":
         - ![Screenshot_2](https://github.com/user-attachments/assets/196be624-4f74-4768-bd2c-21a619cb4bf4)
 
