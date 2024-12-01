@@ -10,17 +10,17 @@ public class PlayerPowers : MonoBehaviour
 
     void Start()
     {
-        // Obtenha referências a outros componentes do jogador
         _playerAttack = GetComponent<PlayerAttack>();
 
-        if (!_playerAttack)
-            Debug.LogError("PlayerHealth ou PlayerCombat não encontrados!");
+        if (!_playerAttack) Debug.LogError("PlayerAttack não encontrados!");
     }
 
     void Update()
     {
-        // Exemplo: Ative/desative poderes com as teclas
+        //Toggle para vida infinita
         if (Input.GetKeyDown(KeyCode.H)) ToggleInfiniteHealth();
+        
+        //Toggle para super forca
         if (Input.GetKeyDown(KeyCode.F)) ToggleSuperStrength();
     }
 

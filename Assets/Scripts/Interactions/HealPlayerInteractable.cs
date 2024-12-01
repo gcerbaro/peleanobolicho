@@ -1,46 +1,40 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // Quando for usar algo para interagir tem que colocar a layer 6 (interactable)
 public class HealPlayerInteractable : Interactable
 {
-    [SerializeField] private float healAmount = 15f; // Valor de cura ao interagir.
+    [SerializeField] private float healAmount = 15f; 
     [SerializeField] private AudioClip bonusSound;
     [SerializeField] private HighlightController highlightController;
-    [SerializeField] private HealthSystem _healthSystem;
+    [SerializeField] private HealthSystem healthSystem;
 
     private new void Awake()
     {
-        // Verifica se o HighlightController está atribuído. Se não, tenta buscar no objeto.
-        if (!highlightController)
-        {
-            highlightController = GetComponent<HighlightController>();
-            if (!highlightController)
-            {
-                Debug.LogError("HighlightController não encontrado neste objeto!");
-            }
-        }
+        gameObject.layer = 6;
+        
+        highlightController = GetComponent<HighlightController>();
+        
+        if (!highlightController) Debug.Log("highlightController nao encontrado");
     }
 
     public override void OnInteract()
     {
-        if (_healthSystem.CurrentHealth >= _healthSystem.MaxHealth) return;
-        Actions.onHealLife?.Invoke(healAmount); // Aciona o evento para curar a vida.
+        if (healthSystem.CurrentHealth >= healthSystem.MaxHealth) return;
+        
+        Actions.onHealLife?.Invoke(healAmount); 
+        
         SoundFXManager.instance.PlaySoundEffect(bonusSound, transform, 0.5f);
 
-        gameObject.SetActive(false); // Desativa o objeto após a interação.
+        gameObject.SetActive(false); 
     }
 
     public override void OnFocus()
     {
-        Debug.Log("olhando pro salame");
-        highlightController?.EnableHighlight(); // Ativa o highlight.
+        highlightController?.EnableHighlight(); 
     }
 
     public override void OnLoseFocus()
     {
-        Debug.Log("parei de olhar pro salame");
-        highlightController?.DisableHighlight(); // Desativa o highlight.
+        highlightController?.DisableHighlight(); 
     }
 }

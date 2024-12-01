@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,10 +9,7 @@ public class SoundFXManager : MonoBehaviour
 
     private void Awake()
     {
-        if (!instance)
-        {
-            instance = this;
-        }
+        if (!instance) instance = this;
     }
 
     public void PlaySoundEffect(AudioClip audioClip, Transform spawnTransform, float volume)
@@ -23,13 +17,11 @@ public class SoundFXManager : MonoBehaviour
         AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
         
         audioSource.clip = audioClip;
-        
         audioSource.volume = volume;
         
         audioSource.Play();
         
         float clipLength = audioSource.clip.length;
-        
         Destroy(audioSource.gameObject, clipLength);
     }
     
@@ -40,13 +32,11 @@ public class SoundFXManager : MonoBehaviour
         AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
         
         audioSource.clip = audioClip[rand];
-        
         audioSource.volume = volume;
         
         audioSource.Play();
         
         float clipLength = audioSource.clip.length;
-        
         Destroy(audioSource.gameObject, clipLength);
     }
 }

@@ -7,8 +7,8 @@ public class StaminaSystem : MonoBehaviour
     public float CurrentStamina { get; private set; }
 
     [SerializeField] private float staminaUseMultiplier = 50f;
-    [SerializeField] private float timeBeforeStaminaRegen = 0.7f; // Tempo de espera menor para iniciar regeneração
-    [SerializeField] private float staminaValueIncrement = 5f;  // Incremento direto de stamina
+    [SerializeField] private float timeBeforeStaminaRegen = 0.7f; 
+    [SerializeField] private float staminaValueIncrement = 5f;  
 
     private Coroutine _regeneratingStamina;
 
@@ -17,26 +17,19 @@ public class StaminaSystem : MonoBehaviour
         CurrentStamina = MaxStamina;
     }
 
-    public void UseStamina(float deltaTime)
+    public void UseStamina()
     {
-        // Permitir uso da stamina se houver um valor positivo
         if (CurrentStamina > 0)
         {
-            CurrentStamina -= staminaUseMultiplier * deltaTime;
+            CurrentStamina -= staminaUseMultiplier * Time.deltaTime;
 
-            if (CurrentStamina < 0)
-                CurrentStamina = 0;
+            if (CurrentStamina < 0) CurrentStamina = 0;
 
+            //Atualiza UI
             Actions.onStaminaChange?.Invoke(CurrentStamina);
-
-            // Reinicia a regeneração se a stamina acabou
-            if (CurrentStamina <= 0)
+            
+            if (_regeneratingStamina != null)
             {
-                StartRegen();
-            }
-            else if (_regeneratingStamina != null)
-            {
-                // Parar regeneração se a stamina ainda está sendo usada
                 StopCoroutine(_regeneratingStamina);
                 _regeneratingStamina = null;
             }
@@ -45,7 +38,6 @@ public class StaminaSystem : MonoBehaviour
 
     public void StartRegen()
     {
-        // Iniciar regeneração apenas se não estiver regenerando e se a stamina não estiver no máximo
         if (_regeneratingStamina == null && CurrentStamina < MaxStamina)
         {
             _regeneratingStamina = StartCoroutine(RegenerateStamina());
@@ -58,18 +50,18 @@ public class StaminaSystem : MonoBehaviour
 
         while (CurrentStamina < MaxStamina)
         {
-            // Incrementa de forma suave e contínua
             CurrentStamina = Mathf.MoveTowards(CurrentStamina, MaxStamina, staminaValueIncrement * Time.deltaTime);
 
-            // Atualiza o UI ou outras partes do jogo
+            // Atualiza a UI
             Actions.onStaminaChange?.Invoke(CurrentStamina);
 
-            yield return null; // Espera um frame antes do próximo incremento
+            yield return null; 
         }
-
-        // Quando a regeneração termina, garante que CurrentStamina esteja exatamente no valor máximo
+        
         CurrentStamina = MaxStamina;
+        
         Actions.onStaminaChange?.Invoke(CurrentStamina);
+        
         _regeneratingStamina = null;
     }
 }

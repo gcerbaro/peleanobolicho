@@ -302,8 +302,7 @@ public class FirstPersonController : MonoBehaviour
         
         if (_currentInput != Vector2.zero && IsSprinting)
         {
-            _staminaSystem.UseStamina(Time.deltaTime); 
-
+            _staminaSystem.UseStamina(); 
           
             if (_staminaSystem.CurrentStamina <= 0)
             {

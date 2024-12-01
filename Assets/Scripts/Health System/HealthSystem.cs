@@ -37,18 +37,15 @@ public class HealthSystem : MonoBehaviour
         // Invoca o evento de dano para atualizar a UI
         Actions.onDamage?.Invoke(CurrentHealth);
         
-        if (CurrentHealth <= 0)
-            KillPlayer();
+        if (CurrentHealth <= 0) KillPlayer();
     }
     
     private void HealLife(float healAmount)
     {
         if (isInfiniteHealth == 1) return;
         
-        if (CurrentHealth >= MaxHealth)
-            return;
-
-        // Limita a vida ao valor máximo permitido
+        if (CurrentHealth >= MaxHealth) return;
+        
         CurrentHealth = Mathf.Min(CurrentHealth + healAmount, MaxHealth);
     
         // Invoca o evento para atualizar a UI
@@ -59,17 +56,12 @@ public class HealthSystem : MonoBehaviour
     {
         isInfiniteHealth = f;
 
-        if (isInfiniteHealth == 1)
-        {
-            CurrentHealth = MaxHealth; // Restaura a vida ao máximo
-        }
+        if (isInfiniteHealth == 1) CurrentHealth = MaxHealth; 
     }
-
 
     private void KillPlayer()
     {
         CurrentHealth = 0;
-        print("dead");
         SceneManager.LoadScene("Endofgame");
     }
 }
