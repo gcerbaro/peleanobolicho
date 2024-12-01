@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "peleanobolicho.sln"
+    "dotnet.defaultSolution": "p2.sln"
 }
