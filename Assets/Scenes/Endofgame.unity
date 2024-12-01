@@ -301,6 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1060739395}
+  clickSound: {fileID: 8300000, guid: 63e3a35ceb72bce49b2a18efb253f84f, type: 3}
 --- !u!4 &423402992
 Transform:
   m_ObjectHideFlags: 0
@@ -611,9 +612,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 423402991}
+      - m_Target: {fileID: 423402990}
         m_TargetAssemblyTypeName: GameOver, Assembly-CSharp
-        m_MethodName: ReturnToMenu
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

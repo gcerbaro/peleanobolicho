@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class GameOver : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private AudioClip clickSound;
     
     private int _finalScore;
     
@@ -12,25 +13,34 @@ public class GameOver : MonoBehaviour
     {
         _finalScore = ScoreManager.Instance.GetScore();
         scoreText.text = "Enemies killed: " + _finalScore.ToString();
-        ServiceLocator.Reset();
         Time.timeScale = 1; // Garante que o jogo não está pausado.
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
     
+    private void PlayClickSound()
+    {
+        SoundFXManager.instance.PlaySoundEffect(clickSound,transform,1f);
+    }
+    
     public void RestartGame()
     {
+        PlayClickSound();
         SceneManager.LoadScene("TestSCENE");
         ScoreManager.Instance.ResetScore();
         
     }
 
-    public void ReturnToMenu(){
+    public void ReturnToMenu()
+    {
+        PlayClickSound();
         SceneManager.LoadScene("Menu");
         ScoreManager.Instance.ResetScore();
     }
 
-    public void QuitGame(){
+    public void QuitGame()
+    {
+        PlayClickSound();
         #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
         #else

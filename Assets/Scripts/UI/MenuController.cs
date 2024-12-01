@@ -17,7 +17,6 @@ public class MenuController : MonoBehaviour
     private void Awake()
     {
         difficultyManager = FindObjectOfType<DifficultyManager>();
-        ServiceLocator.Reset(); // Reseta qualquer serviço do seu jogo
     }
 
     void Start()
