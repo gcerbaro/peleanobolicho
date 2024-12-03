@@ -20,7 +20,7 @@ public class EnemyBehavior : MonoBehaviour
     
 
     [Header("Configurações de Detecção e Ataque")]
-    [SerializeField] private float attackBoxHeightOffset = 1f; // Ajuste manual da altura
+    [SerializeField] private float attackBoxHeightOffset = 1f; 
     [SerializeField] private float detectionRadius = 10f;
     [SerializeField] private float attackCooldown = 0.5f;
     [SerializeField] private Vector3 attackBoxSize = new Vector3(2f, 2f, 2f);
@@ -63,7 +63,6 @@ public class EnemyBehavior : MonoBehaviour
         _animator = GetComponent<Animator>();
         _enemyHealth = GetComponent<EnemyHealth>();
 
-        // Encontra a sala no pai
         roomControl = GetComponentInParent<Room>();
 
         if (!roomControl) Debug.LogError("RoomControl não encontrado para o inimigo: " + gameObject.name);
@@ -84,45 +83,45 @@ public class EnemyBehavior : MonoBehaviour
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        // Atualiza o parâmetro de velocidade para a Blend Tree
+        
         _animator.SetFloat(Speed, _agent.velocity.magnitude);
 
-        // Executa metodo dos passos
+    
         HandleFootsteps();
         
         if (distanceToPlayer <= detectionRadius && HasLineOfSight(player))
         {
-            // Persegue ou ataca o jogador com base na distância
+            
             if (!IsPlayerInAttackRange())
             {
-                // Persegue o jogador
+                
                 _animator.SetBool(IsFighting, false);
-                SetCombatState(false, false); // Fora de combate
+                SetCombatState(false, false); 
                 _agent.SetDestination(player.position);
             }
             else
             {
-                // Entrou em alcance de ataque
+                
                 _animator.SetFloat(Speed, 0f);
                 _animator.SetBool(IsFighting, true);
-                SetCombatState(true, false); // Está lutando
+                SetCombatState(true, false); 
 
-                _agent.ResetPath(); // Para o movimento
+                _agent.ResetPath(); 
 
                 if (!isAttacking && Time.time >= _nextAttackTime)
                 {
-                    isAttacking = true; // Ativa "estado" de ataque
-                    SetCombatState(false, true); // Está atacando
-                    _animator.SetTrigger(Attack); // Ativa animação de ataque
-                    _nextAttackTime = Time.time + attackCooldown; // Define o cooldown
+                    isAttacking = true; 
+                    SetCombatState(false, true); 
+                    _animator.SetTrigger(Attack); 
+                    _nextAttackTime = Time.time + attackCooldown; 
                 }
             }
         }
         else
         {
-            // Sai do alcance de detecção ou está obstruído
+            
             _animator.SetBool(IsFighting, false);
-            SetCombatState(false, false); // Saiu do combate
+            SetCombatState(false, false); 
             _agent.ResetPath();
         }
     }
@@ -134,16 +133,16 @@ public class EnemyBehavior : MonoBehaviour
 
     private void HandleFootsteps()
     {
-        // Se o inimigo não estiver se movendo, não faça nada
+   
         if (_agent.velocity.magnitude <= 0f) return;
 
-        // Reduz o tempo do timer
+  
         _footstepTimer -= Time.deltaTime;
 
-        // Quando o timer chega a zero, reproduz o som do passo
+     
         if (_footstepTimer <= 0)
         {
-            // Raycast para detectar o tipo de superfície
+            
             if (Physics.Raycast(transform.position + Vector3.up * 0.5f, Vector3.down, out RaycastHit hit, 3f))
             {
                 switch (hit.collider.tag)
@@ -171,15 +170,15 @@ public class EnemyBehavior : MonoBehaviour
         {
             _animator.SetTrigger(HitReaction);
             
-            // Se a faca estiver ativa
+            
             if (knifeInPlayer.activeSelf) 
             {
-                //Audio so para hits com a faca ativa
+                
                 SoundFXManager.instance.PlayRandomSoundEffects(knifeHitSoundClips, transform, 0.7f);
                 Instantiate(bloodEffect, transform.position + Vector3.up * 1f, Quaternion.identity);
             }
             
-            SoundFXManager.instance.PlayRandomSoundEffects(damageSoundClips,transform, 0.7f); // Audio de hit
+            SoundFXManager.instance.PlayRandomSoundEffects(damageSoundClips,transform, 0.7f); 
         }
 
         if (_agent)
@@ -199,21 +198,17 @@ public class EnemyBehavior : MonoBehaviour
         if (_animator)
         {
             Debug.Log("Death triggered");
-            _animator.SetTrigger(Death); // Ativa a animação de morte
+            _animator.SetTrigger(Death); 
             
-            // Habilita Root Motion para permitir o movimento controlado pela animação
             _animator.applyRootMotion = true;
             
-            // Cria novo array para adicionar novo som apenas aqui
             AudioClip[] currentSounds = deathSoundClips;
 
-            //Adiciona som apenas se faca estiver ativa
             if (knifeInPlayer.activeSelf)
             {
                 currentSounds.Append(knifeExtraDeathSound);
             }
             
-            //Reproz sons de morte
             SoundFXManager.instance.PlayRandomSoundEffects(currentSounds,transform,1f);
         }
 
@@ -239,23 +234,21 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
-    // Chamado via evento de animação
     public void ApplyDamage() 
     {
         SoundFXManager.instance.PlaySoundEffect(airSwooshClip,transform,0.3f);
         if (IsPlayerInAttackRange())
         {
-            Actions.onTakeDamage(_baseDamage); // Aplica dano ao jogador
+            Actions.onTakeDamage(_baseDamage); 
                 
-            // Audio de ataque de soco 
             SoundFXManager.instance.PlayRandomSoundEffects(attackSoundClips,transform, 1f); 
             
-            // Audio de dano no player
+
             SoundFXManager.instance.PlayRandomSoundEffects(damageSoundClips,player.transform, 1f); 
         }
 
-        isAttacking = false; // Libera o ataque
-        SetCombatState(true, false); // Continua lutando, mas não atacando
+        isAttacking = false; 
+        SetCombatState(true, false); 
     }
 
     private bool IsPlayerInAttackRange()
@@ -277,26 +270,26 @@ public class EnemyBehavior : MonoBehaviour
     
     private bool HasLineOfSight(Transform target)
     {
-        // Define a origem do raycast (posição do inimigo)
-        Vector3 origin = transform.position + Vector3.up * 1.5f; // Ajuste a altura para a cabeça do inimigo
+        
+        Vector3 origin = transform.position + Vector3.up * 1.5f; 
 
-        // Calcula a direção do raycast
+        
         Vector3 direction = (target.position - origin).normalized;
 
-        // Comprimento do raycast
+        
         float distance = Vector3.Distance(origin, target.position);
 
-        // Raycast para verificar obstruções
+        
         if (Physics.Raycast(origin, direction, out RaycastHit hit, distance))
         {
-            // Verifica se o objeto atingido é o jogador
+           
             if (hit.collider.CompareTag("Player"))
             {
-                return true; // Linha de visão clara
+                return true; 
             }
         }
 
-        return false; // Algo está bloqueando a visão
+        return false; 
     }
 
 
@@ -310,10 +303,5 @@ public class EnemyBehavior : MonoBehaviour
         OnCombatStateChanged?.Invoke(isFighting, attacking);
     }
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = new Color(0f, 0f, 1f, 0.5f);
-        Vector3 boxCenter = transform.position + transform.forward * attackBoxOffset + Vector3.up * attackBoxHeightOffset;
-        Gizmos.DrawCube(boxCenter, attackBoxSize);
-    }
+   
 }

@@ -21,12 +21,12 @@ public class HandleStateChange : MonoBehaviour
     {
         if (isFighting || isAttacking)
         {
-            _agent.isStopped = true; // Para completamente o agente
-            _agent.ResetPath();     // Remove qualquer destino ativo
+            _agent.isStopped = true; 
+            _agent.ResetPath();    
         }
         else
         {
-            _agent.isStopped = false; // Permite movimento
+            _agent.isStopped = false; 
         }
     }
 

@@ -73,12 +73,4 @@ public class PlayerAttack : MonoBehaviour
     {
         _damageMultiplier = isActive ? 15f : 1f;
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Vector3 boxCenter = transform.position + transform.forward * attackOffset;
-        Gizmos.matrix = Matrix4x4.TRS(boxCenter, transform.rotation, Vector3.one);
-        Gizmos.DrawWireCube(Vector3.zero, attackBoxSize);
-    }
 }

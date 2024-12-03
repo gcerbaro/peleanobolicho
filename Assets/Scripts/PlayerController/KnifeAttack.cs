@@ -123,11 +123,5 @@ public class KnifeAttack : MonoBehaviour
         _playerAttack.enabled = true;
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.blue;
-        Vector3 boxCenter = transform.position + transform.forward * knifeAttackRange;
-        Gizmos.matrix = Matrix4x4.TRS(boxCenter, transform.rotation, Vector3.one);
-        Gizmos.DrawWireCube(Vector3.zero, knifeAttackBoxSize);
-    }
+   
 }
