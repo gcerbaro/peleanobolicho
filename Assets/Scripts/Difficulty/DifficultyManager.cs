@@ -26,8 +26,8 @@ public class DifficultyManager : MonoBehaviour
                 PlayerDamageMultiplier = 1f;
                 break;
             case Difficulty.Hard:
-                EnemyHealthMultiplier = 2f;
-                EnemyDamageMultiplier = 2f;
+                EnemyHealthMultiplier = 1.5f;
+                EnemyDamageMultiplier = 1.5f;
                 PlayerDamageMultiplier = 1f;
                 break;
         }
