@@ -36,7 +36,7 @@
     - Assim o jogo vai estar pronto:
         - ![Screenshot_6](https://github.com/user-attachments/assets/f8c37027-c4e0-43b0-8890-2d0458496870)
     - Vídeo do projeto em funcionamento: 
-        - 
+        - [Video demo](https://drive.google.com/file/d/1tF7jY36clmv3D84Y2Mb24krnRsgbZswd/view?usp=sharing)
 
 - *Organização do projeto:*
     - Trello utilizado apenas na primeira semana do projeto para levantamento de requisitos.
