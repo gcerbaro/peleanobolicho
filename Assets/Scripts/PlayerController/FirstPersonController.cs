@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class FirstPersonController : MonoBehaviour
 {
@@ -36,12 +37,12 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float jumpForce = 4.0f;
     [SerializeField] private float gravity = -9.81f;
     
-    //crouching
-    private float _crouchHeight = 0.5f;
-    private float _standingHeight = 2f;
-    private float _timeToCrouch = 0.25f;
-    private Vector3 _crouchingCenter = new Vector3(0, 0.5f, 0);
-    private Vector3 _standingCenter = new Vector3(0, 0, 0);
+    [Header("Crouch parameters")]
+    [SerializeField] private float crouchHeight = 0.5f;
+    [SerializeField] private float standingHeight = 2f;
+    [SerializeField] private float timeToCrouch = 0.25f;
+    [SerializeField] private Vector3 crouchingCenter = new Vector3(0, 0.5f, 0);
+    [SerializeField] private Vector3 standingCenter = new Vector3(0, 0, 0);
     
     [Header("Headbob parameters")] 
     [SerializeField] private float walkBobSpeed = 14f;
@@ -64,7 +65,7 @@ public class FirstPersonController : MonoBehaviour
     private float GetCurrentOffset => _isCrouching ? baseStepSpeed * crouchStepMultiplier : 
                                        IsSprinting ? baseStepSpeed * speedStepMultiplier : baseStepSpeed;
     
-    [Header("Interaction")] 
+    //Interaction
     private Vector3 _interactionRayPoint = new Vector3(0.5f, 0.5f, 0);
     private float _interactionDistance = 2f;
     private LayerMask _interactionLayer;
@@ -114,9 +115,15 @@ public class FirstPersonController : MonoBehaviour
         _animator = GetComponentInChildren<Animator>();
         _interactionLayer = LayerMask.GetMask("Interactable");
         _staminaSystem = FindObjectOfType<StaminaSystem>();
-        _healthSystem = FindObjectOfType<HealthSystem>();
+        _healthSystem = GetComponent<HealthSystem>();
         _playerCamera = GetComponentInChildren<Camera>();
         _characterController = GetComponent<CharacterController>();
+        
+        if (!_animator) Debug.Log("Animator nao encontrado em FPC");
+        if (!_staminaSystem) Debug.Log("stamina nao encontrado em FPC");
+        if (!_healthSystem) Debug.Log("PealthSystem nao encontrado em FPC");
+        if (!_playerCamera) Debug.Log("PlayerCamera nao encontrado em FPC");
+        if (!_characterController) Debug.Log("CharacterController nao encontrado em FPC");
         
         _defaultYpos = _playerCamera.transform.localPosition.y;
         
@@ -127,7 +134,7 @@ public class FirstPersonController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
-        //movement variables
+        // Seta variaveis de movimento
         sprintSpeed = walkSpeed * 2;
         crouchSpeed = walkSpeed * 0.5f;
     }
@@ -168,13 +175,14 @@ public class FirstPersonController : MonoBehaviour
 
     private void HandleMovementInput()
     {
-        //seta a velocidade buscada
+        //Seta a velocidade buscada
         _targetSpeed = IsSprinting ? sprintSpeed : (_isCrouching ? crouchSpeed : walkSpeed);
         
         //Armazena velocidade atual e usa speedsmoothVelocity para desacelerar ou acelerar player.
         _currentSpeed = Mathf.SmoothDamp(_currentSpeed, _targetSpeed, ref _speedSmoothVelocity, speedSmoothTime);
 
         // Atualiza _currentInput com a velocidade 
+        // Vertical = W e S | Horizontal = A e D
         _currentInput = new Vector2(_currentSpeed * Input.GetAxis("Vertical"), Input.GetAxis("Horizontal") * _currentSpeed);
         
         float moveDirectionY = _moveDirection.y;
@@ -217,7 +225,6 @@ public class FirstPersonController : MonoBehaviour
     {
         if (ShouldJump)
             _moveDirection.y = jumpForce; 
-            
     }
     
     private void HandleCrouch()
@@ -336,15 +343,15 @@ public class FirstPersonController : MonoBehaviour
         _duringCrouchAnimation = true;
 
         float timeElapsed = 0f;
-        float targetHeight = _isCrouching ? _standingHeight : _crouchHeight;
+        float targetHeight = _isCrouching ? standingHeight : crouchHeight;
         float currentHeight = _characterController.height;
-        Vector3 targetCenter = _isCrouching ? _standingCenter : _crouchingCenter;
+        Vector3 targetCenter = _isCrouching ? standingCenter : crouchingCenter;
         Vector3 currentCenter = _characterController.center;
 
-        while (timeElapsed < _timeToCrouch)
+        while (timeElapsed < timeToCrouch)
         {
-            _characterController.height = Mathf.Lerp(currentHeight, targetHeight, timeElapsed / _timeToCrouch);
-            _characterController.center = Vector3.Lerp(currentCenter, targetCenter, timeElapsed / _timeToCrouch);
+            _characterController.height = Mathf.Lerp(currentHeight, targetHeight, timeElapsed / timeToCrouch);
+            _characterController.center = Vector3.Lerp(currentCenter, targetCenter, timeElapsed / timeToCrouch);
             timeElapsed += Time.deltaTime;
             yield return null;
         }

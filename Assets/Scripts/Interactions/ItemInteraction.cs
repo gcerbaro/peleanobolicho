@@ -10,9 +10,15 @@ public class ItemInteraction : Interactable
 
     [Header("Audio clips")]
     [SerializeField] private AudioClip knifeEquipSfx;
+    
+    [Header("Dependencias")]
+    [SerializeField] private KnifeAttack knifeAttack;
 
     public new void Awake()
     {
+        if (!knifeAttack)
+            Debug.Log("Knife attack nao encontrado em interagivel");
+        
         gameObject.layer = 6;
         
         if (!lowPolyArms || !knifeInPlayer) Debug.LogError("LowPolyArms ou KnifeInPlayer não encontrados na cena!");
@@ -38,6 +44,8 @@ public class ItemInteraction : Interactable
     public override void OnInteract()
     {
         SoundFXManager.instance.PlaySoundEffect(knifeEquipSfx, transform, 0.5f);
+
+        knifeAttack.knifeDurability = knifeAttack.startKnifeDur;
         
         if (!knifeInPlayer.activeSelf && lowPolyArms.activeSelf)
         {

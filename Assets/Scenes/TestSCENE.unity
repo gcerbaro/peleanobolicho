@@ -2780,6 +2780,7 @@ Transform:
   m_Children:
   - {fileID: 109447722}
   - {fileID: 336861880}
+  - {fileID: 1465031749}
   m_Father: {fileID: 302124685}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &101941420
@@ -3292,7 +3293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806d7f4b56d262d4ab5298a30aa13f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightMaterial: {fileID: 0}
+  highlightMaterial: {fileID: 2100000, guid: 186d5dc50056e0d45ab3865fb2264f88, type: 2}
 --- !u!114 &124896664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5739,7 +5740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806d7f4b56d262d4ab5298a30aa13f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightMaterial: {fileID: 0}
+  highlightMaterial: {fileID: 2100000, guid: 186d5dc50056e0d45ab3865fb2264f88, type: 2}
 --- !u!114 &207128774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6359,7 +6360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806d7f4b56d262d4ab5298a30aa13f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightMaterial: {fileID: 0}
+  highlightMaterial: {fileID: 2100000, guid: 186d5dc50056e0d45ab3865fb2264f88, type: 2}
 --- !u!114 &226353690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14725,6 +14726,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1610918261689630752, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
         type: 3}
+      propertyPath: knifeAttack
+      value: 
+      objectReference: {fileID: 670454618}
+    - target: {fileID: 1610918261689630752, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
       propertyPath: lowPolyArms
       value: 
       objectReference: {fileID: 1870856085}
@@ -14733,6 +14739,11 @@ PrefabInstance:
       propertyPath: knifeInPlayer
       value: 
       objectReference: {fileID: 1009191165}
+    - target: {fileID: 2062674968807580199, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: highlightMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 186d5dc50056e0d45ab3865fb2264f88, type: 2}
     - target: {fileID: 7157828919218241066, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16975,14 +16986,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 5
-  AttackKey: 324
+  attackKey: 323
   attackBoxSize: {x: 1, y: 2, z: 1}
-  attackRange: 1
+  attackOffset: 1.5
   punchAirSoundFx: {fileID: 8300000, guid: 5d93218c3630a7d42be8ea7ef2832233, type: 3}
   punchHitSoundFxs:
   - {fileID: 8300000, guid: d6c30dcecb76bcf45b351a4e565ebcdf, type: 3}
   - {fileID: 8300000, guid: 639803dd948e60648b08de4e9f3c2fc2, type: 3}
   - {fileID: 8300000, guid: 9d0fdf2bdc4cc264a9ce53548d6c4a15, type: 3}
+  animator: {fileID: 1870856087}
 --- !u!114 &670454618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16996,13 +17008,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knifeDamage: 15
-  knifeAttackRange: 2
+  knifeAttackRange: 1.29
   knifeDurability: 7
-  knifeAttackBoxSize: {x: 1, y: 2, z: 1.5}
-  attackBoxOffset: {x: 0, y: 0, z: -0.8}
-  knifeAttackKey: 323
   attackCooldown: 0.5
   damageDelay: 0.3
+  knifeAttackBoxSize: {x: 1, y: 2, z: 1.5}
+  knifeAttackKey: 323
   knifeHitsSfx: []
   breakToolSfx: {fileID: 8300000, guid: 2b4bd62e5ba3b8645a016ac532b838de, type: 3}
   lowPolyArms: {fileID: 1870856085}
@@ -20964,7 +20975,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806d7f4b56d262d4ab5298a30aa13f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightMaterial: {fileID: 0}
+  highlightMaterial: {fileID: 2100000, guid: 186d5dc50056e0d45ab3865fb2264f88, type: 2}
 --- !u!114 &871700039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24177,7 +24188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806d7f4b56d262d4ab5298a30aa13f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightMaterial: {fileID: 0}
+  highlightMaterial: {fileID: 2100000, guid: 186d5dc50056e0d45ab3865fb2264f88, type: 2}
 --- !u!114 &1033561952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33683,6 +33694,100 @@ Transform:
   - {fileID: 1695064459}
   m_Father: {fileID: 99739777}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1465031748
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 101715389}
+    m_Modifications:
+    - target: {fileID: 1610918261689630752, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: knifeAttack
+      value: 
+      objectReference: {fileID: 670454618}
+    - target: {fileID: 1610918261689630752, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: lowPolyArms
+      value: 
+      objectReference: {fileID: 1870856085}
+    - target: {fileID: 1610918261689630752, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: knifeInPlayer
+      value: 
+      objectReference: {fileID: 1009191165}
+    - target: {fileID: 2062674968807580199, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: highlightMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 186d5dc50056e0d45ab3865fb2264f88, type: 2}
+    - target: {fileID: 7157828919218241066, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.73
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157828919218241066, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157828919218241066, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.73
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157828919218241066, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7065158
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157828919218241066, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.55024856
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157828919218241066, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.35111716
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157828919218241066, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.27345705
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157828919218241066, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157828919218241066, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7157828919218241066, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7502548202222331024, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+        type: 3}
+      propertyPath: m_Name
+      value: KnifeNothing (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c2ec2b38a9da7dc4a9b33116e36f86da, type: 3}
+--- !u!4 &1465031749 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7157828919218241066, guid: c2ec2b38a9da7dc4a9b33116e36f86da,
+    type: 3}
+  m_PrefabInstance: {fileID: 1465031748}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1471846260
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39376,7 +39481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806d7f4b56d262d4ab5298a30aa13f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightMaterial: {fileID: 0}
+  highlightMaterial: {fileID: 2100000, guid: 186d5dc50056e0d45ab3865fb2264f88, type: 2}
 --- !u!114 &1699641482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44305,6 +44410,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1484013202}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1870856087 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: e3f27025bf4b13841bc2846bd0e3d699,
+    type: 3}
+  m_PrefabInstance: {fileID: 1484013202}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1889226482
 GameObject:
   m_ObjectHideFlags: 0
@@ -48094,7 +48205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 806d7f4b56d262d4ab5298a30aa13f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightMaterial: {fileID: 0}
+  highlightMaterial: {fileID: 2100000, guid: 186d5dc50056e0d45ab3865fb2264f88, type: 2}
 --- !u!114 &2039246176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52026,6 +52137,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 101715389}
     m_Modifications:
+    - target: {fileID: 591864875828644389, guid: 94f596f5ea1b3b840bed3cff9957d60a,
+        type: 3}
+      propertyPath: highlightMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 186d5dc50056e0d45ab3865fb2264f88, type: 2}
     - target: {fileID: 4499639954545920936, guid: 94f596f5ea1b3b840bed3cff9957d60a,
         type: 3}
       propertyPath: healthSystem

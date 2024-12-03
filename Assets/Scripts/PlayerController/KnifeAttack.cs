@@ -12,7 +12,6 @@ public class KnifeAttack : MonoBehaviour
     [SerializeField] private float attackCooldown = 0.5f; // Tempo entre ataques
     [SerializeField] private float damageDelay = 0.2f; // Atraso antes do dano
     [SerializeField] private Vector3 knifeAttackBoxSize = new Vector3(2f, 2f, 3f); //Define tamanho da caixa de ataque
-    [SerializeField] private Vector3 attackBoxOffset = new Vector3(0f, 0f, 1f); //Offset em relacao ao player para caixa de ataque
     [SerializeField] private KeyCode knifeAttackKey = KeyCode.Mouse0; // Botao de ataque 
     
     [Header("Configuracoes de audio")]
@@ -26,14 +25,20 @@ public class KnifeAttack : MonoBehaviour
     
     private bool _canAttack = false;
     private float knifeBreakDelay = 0.5f; 
-    private float startKnifeDur;
+    public float startKnifeDur;
     private float _lastAttackTime = 0f; 
     private LayerMask _enemyLayer; 
     private PlayerAttack _playerAttack;
 
     private void Start()
     {
+        if (!animator) Debug.Log("Animator da faca nao encontrado");
+        if (!knifeInPlayer) Debug.Log("knifeInPlayer nao encontrado");
+        if (!lowPolyArms) Debug.Log("lowPolyArms nao encontrado");
+        
+        //Seta durabilidade da faca
         startKnifeDur = knifeDurability;
+        
         _playerAttack = GetComponent<PlayerAttack>();
         _enemyLayer = LayerMask.GetMask("Enemy"); 
     }
@@ -43,7 +48,7 @@ public class KnifeAttack : MonoBehaviour
         if (CanUseKnife() && _canAttack)
         {
             _playerAttack.enabled = false;
-            if (Input.GetKeyDown(knifeAttackKey) && Time.time >= _lastAttackTime + attackCooldown)
+            if (Input.GetKeyDown(knifeAttackKey) && Time.time >= _lastAttackTime + attackCooldown && knifeDurability != 0)
             {
                 _lastAttackTime = Time.time; 
                 Attack();
@@ -53,27 +58,24 @@ public class KnifeAttack : MonoBehaviour
     
     private bool CanUseKnife()
     {
-        if (!_canAttack) _canAttack = true;
-        
-        if (!lowPolyArms || !knifeInPlayer) Debug.Log("LPA ou KnifeInPlayer nao encontrado");
+        if (!_canAttack) 
+            _canAttack = true;
         
         return !lowPolyArms.activeSelf && knifeInPlayer.activeSelf;
     }
 
     private void Attack()
     {
-        if (animator) animator.SetTrigger(KnifeHit);
+        animator.SetTrigger(KnifeHit);
         
         StartCoroutine(PerformKnifeAttackWithDelay());
     }
 
     private IEnumerator PerformKnifeAttackWithDelay()
     {
-        
         yield return new WaitForSeconds(damageDelay);
         
-        Vector3 attackBoxCenter = transform.position + transform.forward * knifeAttackRange +
-                                  transform.TransformDirection(attackBoxOffset);
+        Vector3 attackBoxCenter = transform.position + transform.forward * knifeAttackRange;
         
         Collider[] hitEnemies = Physics.OverlapBox(
             attackBoxCenter,
@@ -83,17 +85,13 @@ public class KnifeAttack : MonoBehaviour
 
         bool hitOneEnemy = false;
         
-        if (hitEnemies.Length > 0)
+        foreach (Collider enemy in hitEnemies)
         {
-            foreach (Collider enemy in hitEnemies)
+            EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
+            if (enemyHealth)
             {
-                EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
-                if (enemyHealth)
-                {
-                    enemyHealth.TakeDamage(knifeDamage);
-                    hitOneEnemy = true;
-                    Debug.Log($"{enemy.name} tomou {knifeDamage} de dano da faca.");
-                }
+                enemyHealth.TakeDamage(knifeDamage);
+                hitOneEnemy = true;
             }
         }
         
@@ -102,7 +100,8 @@ public class KnifeAttack : MonoBehaviour
             knifeDurability--;
             Debug.Log($"Durabilidade da faca: {knifeDurability}");
 
-            if (knifeDurability <= 0) StartCoroutine(BreakKnifeWithDelay());
+            if (knifeDurability <= 0) 
+                StartCoroutine(BreakKnifeWithDelay());
         }
     }
     private IEnumerator BreakKnifeWithDelay()
@@ -111,7 +110,6 @@ public class KnifeAttack : MonoBehaviour
         yield return new WaitForSeconds(knifeBreakDelay);
 
         BreakKnife();
-        _canAttack = true;
     }
 
     
@@ -123,14 +121,12 @@ public class KnifeAttack : MonoBehaviour
         lowPolyArms.SetActive(true);
         
         _playerAttack.enabled = true;
-        
-        knifeDurability = startKnifeDur;
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
-        Vector3 boxCenter = transform.position + transform.forward * knifeAttackRange + transform.TransformDirection(attackBoxOffset);
+        Vector3 boxCenter = transform.position + transform.forward * knifeAttackRange;
         Gizmos.matrix = Matrix4x4.TRS(boxCenter, transform.rotation, Vector3.one);
         Gizmos.DrawWireCube(Vector3.zero, knifeAttackBoxSize);
     }
