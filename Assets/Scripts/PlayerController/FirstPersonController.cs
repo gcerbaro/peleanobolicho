@@ -209,9 +209,7 @@ public class FirstPersonController : MonoBehaviour
         {
             _blendValue = Mathf.Clamp(_blendValue - Time.deltaTime, 0f, 1f); // Decrementa o valor até 0
         }
-
-        // Atualiza o parâmetro de speed no Animator
-        if (!_animator) Debug.LogError("Animator não encontrado!");
+        
         _animator.SetFloat(Speed, _blendValue);
     }
     
@@ -343,12 +341,14 @@ public class FirstPersonController : MonoBehaviour
         _duringCrouchAnimation = true;
 
         float timeElapsed = 0f;
+        
         float targetHeight = _isCrouching ? standingHeight : crouchHeight;
         float currentHeight = _characterController.height;
+        
         Vector3 targetCenter = _isCrouching ? standingCenter : crouchingCenter;
         Vector3 currentCenter = _characterController.center;
 
-        while (timeElapsed < timeToCrouch)
+        while (timeElapsed < timeToCrouch) 
         {
             _characterController.height = Mathf.Lerp(currentHeight, targetHeight, timeElapsed / timeToCrouch);
             _characterController.center = Vector3.Lerp(currentCenter, targetCenter, timeElapsed / timeToCrouch);
